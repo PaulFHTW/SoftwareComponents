@@ -1,0 +1,11 @@
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/RestAPI
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/appsettings.Development.json
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/appsettings.json
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/RestAPI.dll
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/RestAPI.deps.json
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/RestAPI.runtimeconfig.json
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/RestAPI.pdb
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/Microsoft.OpenApi.dll
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.Swagger.dll
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/bin/Release/net8.0/publish/Swashbuckle.AspNetCore.SwaggerUI.dll
