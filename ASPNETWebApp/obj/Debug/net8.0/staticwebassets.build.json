@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Y8kpU5A+YlQegmllsaDbmR1hLPmIH6KUGfkSpGZ4BrY=",
+  "Source": "ASPNETWebApp",
+  "BasePath": "_content/ASPNETWebApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
