@@ -428,7 +428,7 @@
     ]
   },
   "packageFolders": {
-    "/home/nero/.nuget/packages/": {}
+    "/root/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -436,11 +436,11 @@
       "projectUniqueName": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
       "projectName": "RestAPI",
       "projectPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
-      "packagesPath": "/home/nero/.nuget/packages/",
+      "packagesPath": "/root/.nuget/packages/",
       "outputPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/nero/.nuget/NuGet/NuGet.Config"
+        "/root/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
