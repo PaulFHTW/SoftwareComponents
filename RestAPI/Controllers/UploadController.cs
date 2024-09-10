@@ -9,6 +9,6 @@ public class UploadController : ControllerBase
     [HttpPost]
     public string Upload(string fileName)
     {
-        return "upload successful";
+        return "upload successful\n";
     }
 }
