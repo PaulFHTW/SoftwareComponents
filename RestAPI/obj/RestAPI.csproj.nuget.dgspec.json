@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/ASPNETWebApp/ASPNETWebApp.csproj": {}
+    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj": {}
   },
   "projects": {
-    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/ASPNETWebApp/ASPNETWebApp.csproj": {
+    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/ASPNETWebApp/ASPNETWebApp.csproj",
-        "projectName": "ASPNETWebApp",
-        "projectPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/ASPNETWebApp/ASPNETWebApp.csproj",
+        "projectUniqueName": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
+        "projectName": "RestAPI",
+        "projectPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
         "packagesPath": "/home/nero/.nuget/packages/",
-        "outputPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/ASPNETWebApp/obj/",
+        "outputPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/nero/.nuget/NuGet/NuGet.Config"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.4.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
