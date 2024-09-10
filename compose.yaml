@@ -1,6 +1,11 @@
 services:
   web:
+    init: true
     build: ./RestAPI
     ports:
       - "8081:8081"
-    network_mode: host
+    networks:
+     - web
+
+networks:
+  web:
