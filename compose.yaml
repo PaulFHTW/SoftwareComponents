@@ -4,8 +4,11 @@ services:
     build: ./RestAPI
     ports:
       - "8081:8081"
-    networks:
-     - web
+    #uncomment for windows
+    #networks:
+    # - web
 
+    #uncomment for linux
+    network_mode: host
 networks:
   web:
