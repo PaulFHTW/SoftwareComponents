@@ -9,6 +9,6 @@ services:
     # - web
 
     #uncomment for linux
-    network_mode: host
+    #network_mode: host
 networks:
   web:
