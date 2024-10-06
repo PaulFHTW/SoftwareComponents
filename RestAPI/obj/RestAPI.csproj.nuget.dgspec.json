@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/mnt/f/keep/Zeug/Schule/FH/5. Semester/SWKOM/SoftwareComponents/RestAPI/RestAPI.csproj": {}
+    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj": {}
   },
   "projects": {
-    "/mnt/f/keep/Zeug/Schule/FH/5. Semester/SWKOM/SoftwareComponents/RestAPI/RestAPI.csproj": {
+    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/mnt/f/keep/Zeug/Schule/FH/5. Semester/SWKOM/SoftwareComponents/RestAPI/RestAPI.csproj",
+        "projectUniqueName": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
         "projectName": "RestAPI",
-        "projectPath": "/mnt/f/keep/Zeug/Schule/FH/5. Semester/SWKOM/SoftwareComponents/RestAPI/RestAPI.csproj",
-        "packagesPath": "/home/modex/.nuget/packages/",
-        "outputPath": "/mnt/f/keep/Zeug/Schule/FH/5. Semester/SWKOM/SoftwareComponents/RestAPI/obj/",
+        "projectPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
+        "packagesPath": "/home/nero/.nuget/packages/",
+        "outputPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/modex/.nuget/NuGet/NuGet.Config"
+          "/home/nero/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
