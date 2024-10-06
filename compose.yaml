@@ -39,7 +39,8 @@ services:
     environment:
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
-
+      PAPERLESS_ADMIN_USER: paperless
+      PAPERLESS_ADMIN_PASSWORD: softwarecomponents
 volumes:
   data:
   media:
