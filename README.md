@@ -1,2 +1,0 @@
-# SoftwareComponents
-Software Components LV
