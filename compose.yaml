@@ -1,9 +1,13 @@
 services:
   rest:
     init: true
-    build: ./RestAPI
+    build:
+      context: .
+      dockerfile: ./RestAPI/Dockerfile
     ports:
       - "8081:8081"
+    depends_on:
+      - dal
 
   web:
     image: nginx
@@ -18,10 +22,29 @@ services:
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=postgres
+      - POSTGRES_HOST=host.docker.internal
+      - POSTGRES_PORT=5432
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
+    command:
+        - postgres
+        - -c
+        - listen_addresses=*
+      
+  dal:
+    image: dal_image
+    build:
+      context: .
+      dockerfile: ./DAL/Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
       
 # manage the volume which is named db
 volumes:

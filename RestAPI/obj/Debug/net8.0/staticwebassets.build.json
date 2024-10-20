@@ -1,11 +1,23 @@
 {
   "Version": 1,
-  "Hash": "m3iPKM7tm4DrbOcums1uUCLB/MKhjDDSg7XCVbyi0T8=",
+  "Hash": "VQczMndCrQqNosPRhlwGTbqnnAYK2O8wiYD1FAsMq/Y=",
   "Source": "RestAPI",
   "BasePath": "_content/RestAPI",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "F:\\keep\\Zeug\\Schule\\FH\\5.Semester\\SWKOM\\SoftwareComponents\\DAL\\DAL.csproj",
+      "Version": 2,
+      "Source": "DAL",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
   "DiscoveryPatterns": [],
   "Assets": []
 }
