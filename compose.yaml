@@ -1,6 +1,14 @@
 services:
-  web:
+  rest:
     init: true
     build: ./RestAPI
     ports:
       - "8081:8081"
+
+  web:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./FrontEnd:/usr/share/nginx/html
+    command: ["nginx", '-g', 'daemon off;']
