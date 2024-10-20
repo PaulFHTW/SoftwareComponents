@@ -12,3 +12,17 @@ services:
     volumes:
       - ./FrontEnd:/usr/share/nginx/html
     command: ["nginx", '-g', 'daemon off;']
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+      
+# manage the volume which is named db
+volumes:
+  db:
