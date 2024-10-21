@@ -1,30 +1,28 @@
 ﻿using DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using DAL.Entities;
-using Entities_File = DAL.Entities.File;
-using File = DAL.Entities.File;
 
 namespace DAL.Repositories
 {
-    public class FileRepository(FileContext context) : IFileRepository
+    public class DocumentRepository(DocumentContext context) : IDocumentRepository
     {
-        public async Task<IEnumerable<Entities_File>> GetAllAsync()
+        public async Task<IEnumerable<Document>> GetAllAsync()
         {
             return await context.TodoItems!.ToListAsync();
         }
 
-        public async Task<Entities_File> GetByIdAsync(int id)
+        public async Task<Document> GetByIdAsync(int id)
         {
             return (await context.TodoItems!.FindAsync(id))!;
         }
 
-        public async Task AddAsync(Entities_File item)
+        public async Task AddAsync(Document item)
         {
             await context.TodoItems!.AddAsync(item);
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Entities_File item)
+        public async Task UpdateAsync(Document item)
         {
             context.TodoItems!.Update(item);
             await context.SaveChangesAsync();

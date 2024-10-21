@@ -1,6 +1,6 @@
 using AutoMapper;
+using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
-using File = DAL.Entities.File;
 
 namespace RestAPI.Controllers;
 
@@ -26,7 +26,7 @@ public class DefaultController : ControllerBase
 
         if (response.IsSuccessStatusCode)
         {
-            var items = await response.Content.ReadFromJsonAsync<IEnumerable<File>>();
+            var items = await response.Content.ReadFromJsonAsync<IEnumerable<Document>>();
             //var dtoItems = _mapper.Map<IEnumerable<TodoItemDto>>(items);
             return Ok(items);
         }

@@ -1,6 +1,6 @@
 ﻿namespace DAL.Entities
 {
-    public class File
+    public class Document
     {
         public int Id { get; set; }
         public string Title { get; set; }

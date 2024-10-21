@@ -1,17 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DAL.Entities;
-using Entities_File = DAL.Entities.File;
-using File = DAL.Entities.File;
 
 namespace DAL.Data
 {
-    public sealed class FileContext(DbContextOptions<FileContext> options) : DbContext(options)
+    public sealed class DocumentContext(DbContextOptions<DocumentContext> options) : DbContext(options)
     {
-        public DbSet<Entities_File>? TodoItems { get; set; }
+        public DbSet<Document>? TodoItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Entities_File>(entity =>
+            modelBuilder.Entity<Document>(entity =>
             {
                 entity.ToTable("Files"); 
 

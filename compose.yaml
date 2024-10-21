@@ -6,8 +6,6 @@ services:
       dockerfile: ./RestAPI/Dockerfile
     ports:
       - "8081:8081"
-    depends_on:
-      - dal
 
   web:
     image: nginx
@@ -18,7 +16,7 @@ services:
     command: ["nginx", '-g', 'daemon off;']
 
   postgres:
-    image: postgres
+    image: postgres:16
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -35,16 +33,13 @@ services:
         - postgres
         - -c
         - listen_addresses=*
-      
-  dal:
-    image: dal_image
-    build:
-      context: .
-      dockerfile: ./DAL/Dockerfile
+
+  adminer:
+    image: adminer
     ports:
-      - "8082:8082"
-    depends_on:
-      - postgres
+      - "9091:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
       
 # manage the volume which is named db
 volumes:

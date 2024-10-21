@@ -1,26 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using DAL.Entities;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using DAL.Repositories;
-using Entities_File = DAL.Entities.File;
-using File = DAL.Entities.File;
 
 namespace DAL.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class FileController(IFileRepository repository) : ControllerBase
+    [Route("api/file")]
+    public class DocumentController(IDocumentRepository repository) : ControllerBase, IDocumentController
     {
         [HttpGet]
-        public async Task<IEnumerable<Entities_File>> GetAsync()
+        public async Task<IEnumerable<Document>> GetAsync()
         {
             return await repository.GetAllAsync();
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(Entities_File item)
+        public async Task<IActionResult> PostAsync(Document item)
         {
+            Debug.WriteLine("Hello World 2");
+            
             if (string.IsNullOrWhiteSpace(item.Title))
             {
                 return BadRequest(new { message = "Task name cannot be empty." });
@@ -31,7 +32,7 @@ namespace DAL.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, Entities_File item)
+        public async Task<IActionResult> PutAsync(int id, Document item)
         {
             var existingItem = await repository.GetByIdAsync(id);
             if (existingItem == null)

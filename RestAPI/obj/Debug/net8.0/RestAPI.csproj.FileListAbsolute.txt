@@ -33,9 +33,6 @@
 /mnt/f/keep/Zeug/Schule/FH/5. Semester/SWKOM/SoftwareComponents/RestAPI/obj/Debug/net8.0/ref/RestAPI.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\appsettings.Development.json
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\appsettings.json
-F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\DAL.deps.json
-F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\DAL.runtimeconfig.json
-F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\DAL.exe
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\RestAPI.exe
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\RestAPI.deps.json
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\RestAPI.runtimeconfig.json
@@ -44,7 +41,6 @@ F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
-F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.Configuration.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.Configuration.Abstractions.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.OpenApi.dll
@@ -53,8 +49,6 @@ F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\DAL.dll
-F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\DAL.pdb
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\obj\Debug\net8.0\RestAPI.csproj.AssemblyReference.cache
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\obj\Debug\net8.0\RestAPI.GeneratedMSBuildEditorConfig.editorconfig
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\obj\Debug\net8.0\RestAPI.AssemblyInfoInputs.cache
@@ -81,3 +75,11 @@ F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\FluentValidation.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
 F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll
+F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.Caching.Abstractions.dll
+F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+F:\keep\Zeug\Schule\FH\5.Semester\SWKOM\SoftwareComponents\RestAPI\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
