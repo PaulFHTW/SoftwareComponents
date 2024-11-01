@@ -5,10 +5,12 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Mappings;
+using RestAPI.Queue;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+RabbitSender rabbitSender = new RabbitSender();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
