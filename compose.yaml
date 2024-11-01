@@ -16,7 +16,7 @@ services:
     command: ["nginx", '-g', 'daemon off;']
 
   postgres:
-    image: postgres:16
+    image: postgres:latest
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
@@ -40,7 +40,17 @@ services:
       - "9091:8080"
     environment:
       ADMINER_DEFAULT_SERVER: postgres
-      
+
+  rabbitmq:
+      image: rabbitmq:management
+      container_name: rabbitmq
+      environment:
+        - RABBITMQ_DEFAULT_USER=user
+        - RABBITMQ_DEFAULT_PASS=password
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+        
 # manage the volume which is named db
 volumes:
   db:
