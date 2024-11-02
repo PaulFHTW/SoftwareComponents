@@ -9,7 +9,7 @@ public class RabbitClient{
 
     public void RabbitInit(){
         ConnectionFactory factory= new ConnectionFactory();
-        factory.Uri = new Uri("amqp://user:password@localhost:5672/");
+        factory.Uri = new Uri("amqp://user:password@rabbitmq:5672/");
         factory.ClientProvidedName = "RabbitSender";
         IConnection conn = factory.CreateConnection();
         RabbitMQ.Client.IModel channel = conn.CreateModel();
