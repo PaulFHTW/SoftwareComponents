@@ -5,15 +5,13 @@ using RabbitMQ.Client;
 
 namespace RestAPI.Queue;
 
-public class RabbitSender{
+public class RabbitClient{
 
-    public RabbitSender(){
-        ConnectionFactory factory= new ConnectionFactory();    
-        factory.Uri = new Uri("amqp://user:password@localhost:9093");
+    public void RabbitInit(){
+        ConnectionFactory factory= new ConnectionFactory();
+        factory.Uri = new Uri("amqp://user:password@localhost:5672/");
         factory.ClientProvidedName = "RabbitSender";
-
         IConnection conn = factory.CreateConnection();
-
         RabbitMQ.Client.IModel channel = conn.CreateModel();
 
         string exchangeName = "NPaperless";

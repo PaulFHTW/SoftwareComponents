@@ -4,13 +4,15 @@ using DAL.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Client.Logging;
 using RestAPI.Mappings;
 using RestAPI.Queue;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-RabbitSender rabbitSender = new RabbitSender();
+RabbitClient rabbitClient = new RabbitClient();
+rabbitClient.RabbitInit();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

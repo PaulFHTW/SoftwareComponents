@@ -42,7 +42,7 @@ services:
       ADMINER_DEFAULT_SERVER: postgres
 
   rabbitmq:
-      image: rabbitmq:management
+      image: rabbitmq:3-management-alpine
       container_name: rabbitmq
       environment:
         - RABBITMQ_DEFAULT_USER=user
@@ -50,7 +50,7 @@ services:
       ports:
         - "5672:5672"
         - "9093:15672"
-        
+
 # manage the volume which is named db
 volumes:
   db:
