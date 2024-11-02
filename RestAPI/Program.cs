@@ -11,8 +11,8 @@ using RestAPI.Queue;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-RabbitClient rabbitClient = new RabbitClient();
-rabbitClient.RabbitInit();
+//RabbitClient rabbitClient = new RabbitClient();
+//rabbitClient.RabbitInit();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

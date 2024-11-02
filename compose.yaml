@@ -1,4 +1,6 @@
 services:
+
+
   rest:
     init: true
     build:
@@ -6,6 +8,10 @@ services:
       dockerfile: ./RestAPI/Dockerfile
     ports:
       - "8081:8081"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
 
   web:
     image: nginx
@@ -42,6 +48,7 @@ services:
       ADMINER_DEFAULT_SERVER: postgres
 
   rabbitmq:
+      network_mode: "bridge"
       image: rabbitmq:3-management-alpine
       container_name: rabbitmq
       environment:
@@ -50,6 +57,11 @@ services:
       ports:
         - "5672:5672"
         - "9093:15672"
+      healthcheck:
+        test: rabbitmq-diagnostics -q ping
+        interval: 10s
+        timeout: 10s
+        retries: 3
 
 # manage the volume which is named db
 volumes:
