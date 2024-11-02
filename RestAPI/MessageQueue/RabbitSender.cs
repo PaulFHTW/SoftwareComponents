@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
 using RabbitMQ.Client;
 
-namespace RestAPI.Queue;
-
-public class RabbitClient{
-    public void RabbitInit(){
+public class RabbitSender{
+    public int SendMessage(string message){
         ConnectionFactory factory= new ConnectionFactory();
         factory.Uri = new Uri("amqp://user:password@rabbitmq:5672/");
         factory.ClientProvidedName = "RabbitSender";
@@ -21,11 +19,11 @@ public class RabbitClient{
         channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
         channel.QueueBind(queueName, exchangeName, routingKey, arguments: null);
 
-        byte[] messageBodyBytes = Encoding.UTF8.GetBytes("Hello World!");
-
+        byte[] messageBodyBytes = System.Text.Encoding.UTF8.GetBytes(message);
         channel.BasicPublish(exchange: exchangeName, routingKey: routingKey, basicProperties: null, body: messageBodyBytes);
 
         channel.Close();
         conn.Close();
+        return 0;
     }
 }

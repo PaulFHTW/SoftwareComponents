@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using DAL.Repositories;
 using RestAPI.DTO;
 using RestAPI.DVO;
+using RestAPI.Queue;
 
 namespace RestAPI.Controllers;
 
@@ -36,6 +37,9 @@ public class DocumentController : ControllerBase
             return BadRequest(validation.Errors);
         }
         
+        RabbitSender rabbitSender = new RabbitSender();
+        rabbitSender.SendMessage("document was uploaded");
+
         return await _documentController.PostAsync(file);
     }
     
