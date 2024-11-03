@@ -5,5 +5,5 @@ namespace RestAPI.DTO;
 [DataContract]
 public class DocumentDTO
 {
-    public IFormFile File { get; set; }
+    public IFormFile? File { get; set; }
 }

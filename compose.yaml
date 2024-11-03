@@ -1,6 +1,7 @@
 services:
   rest:
     init: true
+    tty: true
     build:
       context: .
       dockerfile: ./RestAPI/Dockerfile
@@ -19,7 +20,7 @@ services:
     command: ["nginx", '-g', 'daemon off;']
 
   postgres:
-    image: postgres:latest
+    image: postgres:16
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root

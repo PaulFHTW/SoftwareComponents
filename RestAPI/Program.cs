@@ -3,10 +3,13 @@ using DAL.Data;
 using DAL.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using log4net;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client.Logging;
 using RestAPI.Mappings;
 using RestAPI.Queue;
+using RestAPI.Utility;
+using ILogger = RestAPI.Utility.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +22,13 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<DocumentContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
-builder.Services.AddScoped<IDocumentController, DocumentController>();
+builder.Services.AddScoped<IDocumentController, DocumentController>(); 
+builder.Services.AddScoped<ILogger, Logger>();
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddLog4Net();
+});
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

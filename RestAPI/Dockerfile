@@ -39,4 +39,8 @@ RUN dotnet publish "./RestAPI/RestAPI.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Explicitly copy the log4net.config file if it's in the Utility folder
+COPY ./RestAPI/Utility/log4net.config ./log4net.config
+
 ENTRYPOINT ["dotnet", "RestAPI.dll"]

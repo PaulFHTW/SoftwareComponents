@@ -1,25 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj": {}
+    "F:\\keep\\Zeug\\Schule\\FH\\5.Semester\\SWKOM\\SoftwareComponents\\RestAPI\\RestAPI.csproj": {}
   },
   "projects": {
-    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj": {
+    "F:\\keep\\Zeug\\Schule\\FH\\5.Semester\\SWKOM\\SoftwareComponents\\RestAPI\\RestAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
+        "projectUniqueName": "F:\\keep\\Zeug\\Schule\\FH\\5.Semester\\SWKOM\\SoftwareComponents\\RestAPI\\RestAPI.csproj",
         "projectName": "RestAPI",
-        "projectPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
-        "packagesPath": "/home/nero/.nuget/packages/",
-        "outputPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/obj/",
+        "projectPath": "F:\\keep\\Zeug\\Schule\\FH\\5.Semester\\SWKOM\\SoftwareComponents\\RestAPI\\RestAPI.csproj",
+        "packagesPath": "C:\\Users\\Modex\\.nuget\\packages\\",
+        "outputPath": "F:\\keep\\Zeug\\Schule\\FH\\5.Semester\\SWKOM\\SoftwareComponents\\RestAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/nero/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Modex\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -58,6 +65,10 @@
               "target": "Package",
               "version": "[9.0.0-rc.2.24474.1, )"
             },
+            "Microsoft.Extensions.Logging.Log4Net.AspNetCore": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Npgsql": {
               "target": "Package",
               "version": "[8.0.5, )"
@@ -73,6 +84,10 @@
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "log4net": {
+              "target": "Package",
+              "version": "[3.0.3-preview.1, )"
             }
           },
           "imports": [
@@ -94,7 +109,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.110/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
