@@ -51,8 +51,8 @@ namespace RestAPI.Tests{
         }
 
         [Test]
-        public async int Homepage_returns_200(){
-            
+        public void Homepage_returns_200(){
+
         }
 
         [Test]
