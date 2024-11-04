@@ -14,5 +14,13 @@
             UploadDate = uploadDate;
             Path = path;
         }
+
+	public Document() 
+	{
+	    Id = 0;
+	    Title = "";
+	    UploadDate = DateTime.Now;
+	    Path = "";
+	}
     }
 }
