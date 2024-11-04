@@ -48,4 +48,10 @@ public class DocumentController : ControllerBase
     {
         return await _documentController.GetAsync();
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromQuery] int id)
+    {
+        return await _documentController.DeleteAsync(id);
+    }
 }
