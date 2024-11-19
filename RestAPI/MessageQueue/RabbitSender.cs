@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Metadata;
 using RabbitMQ.Client;
 
+namespace RestAPI.Queue;
 public class RabbitSender{
     public int SendMessage(string message){
         ConnectionFactory factory= new ConnectionFactory();

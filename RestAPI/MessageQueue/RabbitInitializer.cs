@@ -5,8 +5,8 @@ using RabbitMQ.Client;
 
 namespace RestAPI.Queue;
 
-public class RabbitClient{
-    public void RabbitInit(){
+public class RabbitInitalizer : IRabbitInitalizer{
+    public RabbitInitalizer(){
 	IConnection? conn = null;
 	RabbitMQ.Client.IModel? channel = null;
 	while(true) {

@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-public class RabbitConsumer{
+namespace RestAPI.Queue;
+public class RabbitConsumer : IRabbitConsumer{
     public int ReceiveMessage(){
         ConnectionFactory factory= new ConnectionFactory();
         factory.Uri = new Uri("amqp://user:password@rabbitmq:5672/");
