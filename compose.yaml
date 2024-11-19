@@ -60,6 +60,15 @@ services:
         timeout: 10s
         retries: 3
 
+  ocrworker:
+    init: true
+    tty: true
+    build:
+      context: .
+      dockerfile: ./OcrWorker/Dockerfile
+    ports:
+      - "8082:8082"
+
 # manage the volume which is named db
 volumes:
   db:

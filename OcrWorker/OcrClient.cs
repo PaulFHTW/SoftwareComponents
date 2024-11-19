@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using ImageMagick;
 using Microsoft.Extensions.Options;
 using Tesseract;
@@ -32,7 +32,7 @@ public class OcrClient : IOcrClient
                 // Perform OCR on the image
                 using (var tesseractEngine = new TesseractEngine(tessDataPath, language, EngineMode.Default))
                 {
-                    using (var page = tesseractEngine.Process(Pix.LoadFromMemory(magickImage.ToByteArray())))
+                    using (var page = tesseractEngine.Process(Pix.LoadFromMemory(magickImage.ToByteArray())))//byte[] image
                     {
                         var extractedText = page.GetText();
                         stringBuilder.Append(extractedText);
@@ -40,7 +40,6 @@ public class OcrClient : IOcrClient
                 }
             }
         }
-
 
         return stringBuilder.ToString();
     }
