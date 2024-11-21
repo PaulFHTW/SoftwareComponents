@@ -7,6 +7,7 @@ using DAL.Repositories;
 using RestAPI.DTO;
 using RestAPI.DVO;
 using RestAPI.Queue;
+using Minio;
 
 namespace RestAPI.Controllers;
 
@@ -18,6 +19,7 @@ public class DocumentController : ControllerBase
     private readonly IMapper _mapper;
     private readonly DocumentValidator _validator;
     private readonly IRabbitSender? _rabbitSender;
+    private readonly IMinioClient _minioClient = new MinioClient();
 
     public DocumentController(IDocumentController documentController, IMapper mapper)
     {
@@ -37,7 +39,9 @@ public class DocumentController : ControllerBase
         {
             return BadRequest(validation.Errors);
         }
-        
+    
+        _minioClient.WithEndpoint("minio").Build();
+
         _rabbitSender?.SendMessage("document was uploaded");
 
         return await _documentController.PostAsync(file);
