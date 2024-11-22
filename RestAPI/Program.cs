@@ -9,7 +9,6 @@ using RabbitMQ.Client.Logging;
 using RestAPI.Mappings;
 using RestAPI.Queue;
 using RestAPI.Utility;
-using RestAPI.Minio;
 using ILogger = RestAPI.Utility.ILogger;
 using Minio;
 using Microsoft.VisualBasic;
@@ -22,10 +21,6 @@ var builder = WebApplication.CreateBuilder(args);
 RabbitInitalizer _rabbitMQ = new RabbitInitalizer();
 _rabbitMQ.RabbitInit();
 builder.Services.AddSingleton<IRabbitInitalizer>(_rabbitMQ);
-
-MinioInitializer _minioInitalizer = new MinioInitializer();
-_minioInitalizer.MinioInit();
-builder.Services.AddSingleton<IMinioInitalizer>(_minioInitalizer);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
