@@ -3,8 +3,7 @@ using NPaperless.OCRLibrary;
 
 Console.WriteLine("OCR with Tesseract Demo!");
 
-//change this to get documents from RabbitMQ
-string filePath = "./docs/HelloWorld.pdf";
+string filePath = "/app/src/OcrWorker/docs/HelloWorld.pdf";
 
 try
 {

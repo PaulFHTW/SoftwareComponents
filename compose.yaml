@@ -68,8 +68,8 @@ services:
       dockerfile: ./OcrWorker/Dockerfile
     ports:
       - "8082:8082"
-    #volumes:
-    #  - ./docs:/app/docs
+    volumes:
+      - ./OcrWorker:/app/src/OcrWorker
 
   minio:
     image: minio/minio
@@ -82,7 +82,7 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
     command: server /data --console-address ":9090"
     volumes:
-      - minio-data:/data
+      - minio-data:/mnt/data
 
 # manage the volume which is named db
 volumes:

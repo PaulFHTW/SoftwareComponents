@@ -31,7 +31,7 @@ public class DocumentController : ControllerBase
         _validator = new DocumentValidator();
         
         _minioClient = new MinioClient()
-                .WithEndpoint("minio:9000")
+                .WithEndpoint("localhost:9000")
                 .WithCredentials("minioadmin", "minioadmin")
                 .Build();
     }

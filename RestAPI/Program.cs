@@ -14,6 +14,8 @@ using Minio;
 using Microsoft.VisualBasic;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.Extensions.DependencyInjection;
+using FileUploader;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,9 @@ var builder = WebApplication.CreateBuilder(args);
 RabbitInitalizer _rabbitMQ = new RabbitInitalizer();
 _rabbitMQ.RabbitInit();
 builder.Services.AddSingleton<IRabbitInitalizer>(_rabbitMQ);
+
+FileUpload _minioUpload = new FileUpload();
+_minioUpload.Upload();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

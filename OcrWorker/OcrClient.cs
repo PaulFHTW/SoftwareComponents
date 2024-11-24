@@ -9,13 +9,11 @@ public class OcrClient : IOcrClient
 {
     private readonly string tessDataPath;
     private readonly string language;
-
     public OcrClient(OcrOptions options)
     {
         this.tessDataPath = options.TessDataPath;
         this.language = options.Language;
     }
-
     public string OcrPdf(Stream pdfStream)
     {
         var stringBuilder = new StringBuilder();
