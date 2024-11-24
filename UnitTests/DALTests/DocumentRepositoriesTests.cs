@@ -42,7 +42,7 @@ namespace DAL.Tests.Repositories
                 new Document(1, "Title 1", DateTime.Now, "/path/1"),
                 new Document(2, "Title 2", DateTime.Now, "/path/2")
             };
-            _context.TodoItems.AddRange(documents);
+            _context.Documents.AddRange(documents);
             await _context.SaveChangesAsync();
 
             // Act
@@ -57,7 +57,7 @@ namespace DAL.Tests.Repositories
         {
             // Arrange
             var document = new Document(1, "Title 1", DateTime.Now, "/path/1");
-            _context.TodoItems.Add(document);
+            _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
             // Act
@@ -86,7 +86,7 @@ namespace DAL.Tests.Repositories
 
             // Act
             await _repository.AddAsync(document);
-            var result = await _context.TodoItems.FindAsync(3);
+            var result = await _context.Documents.FindAsync(3);
 
             // Assert
             Assert.IsNotNull(result);
@@ -98,7 +98,7 @@ namespace DAL.Tests.Repositories
         {
             // Arrange
             var document = new Document(4, "Title 4", DateTime.Now, "/path/4");
-            _context.TodoItems.Add(document);
+            _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
             // Modify document and update
@@ -106,7 +106,7 @@ namespace DAL.Tests.Repositories
             await _repository.UpdateAsync(document);
 
             // Act
-            var result = await _context.TodoItems.FindAsync(4);
+            var result = await _context.Documents.FindAsync(4);
 
             // Assert
             Assert.IsNotNull(result);
@@ -118,12 +118,12 @@ namespace DAL.Tests.Repositories
         {
             // Arrange
             var document = new Document(5, "Title 5", DateTime.Now, "/path/5");
-            _context.TodoItems.Add(document);
+            _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
             // Act
             await _repository.DeleteAsync(5);
-            var result = await _context.TodoItems.FindAsync(5);
+            var result = await _context.Documents.FindAsync(5);
 
             // Assert
             Assert.IsNull(result);

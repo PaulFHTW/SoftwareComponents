@@ -1,3 +1,4 @@
+using System.Data;
 using DAL.Entities;
 using FluentValidation;
 
@@ -13,7 +14,8 @@ public class DocumentValidator : AbstractValidator<Document>
         
         RuleFor(doc => doc.Title)
             .NotNull().WithMessage("Title is required")
-            .Length(1, 100).WithMessage("Title must be between 1 and 100 characters");
+            .Length(1, 100).WithMessage("Title must be between 1 and 100 characters")
+            .Must(title => Path.GetExtension(title) == ".pdf").WithMessage("Title must be a PDF file");
         
         RuleFor(doc => doc.UploadDate)
             .NotNull().WithMessage("Upload date is required");

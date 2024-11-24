@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using AutoMapper;
 using DAL.Controllers;
 using DAL.Entities;
@@ -10,6 +11,7 @@ using RestAPI.Queue;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
+using RestAPI.Queue.Messages;
 
 namespace RestAPI.Controllers;
 
@@ -82,8 +84,9 @@ public class DocumentController : ControllerBase
             }      
         }
 
-        _rabbitSender.SendMessage("document was uploaded");
-
+        file.Path = fileName;
+        
+        _rabbitSender.SendMessage(JsonSerializer.Serialize(new DocumentUploadedMessage(fileName, "Document was uploaded successfully!" )));
         return await _documentController.PostAsync(file);
     }
     
