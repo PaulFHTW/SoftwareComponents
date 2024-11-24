@@ -1,6 +1,20 @@
 const list = document.querySelector('ul');
 const form = document.querySelector('form');
 const file = document.querySelector('input[type="file"]');
+const deleteButton = document.getElementById("delete");
+
+var selected = null;
+
+document.querySelector('ul').addEventListener('click', function(e) {
+    if(e.target.tagName == 'LI') {
+        selected = e.target;
+        
+        var otherSelected = document.querySelector('li.selected');                   
+        if (otherSelected) otherSelected.classList.remove('selected');
+
+        e.target.className = 'selected';
+    }
+});
 
 form.onsubmit = (event) => {
     event.preventDefault();
@@ -17,8 +31,19 @@ form.onsubmit = (event) => {
         fetchDocuments();
         form.reset();
     });
-    
-    
+};
+
+deleteButton.onclick = (event) => {
+      if(!selected) return;
+      
+      deleteDocument(selected.dataset.paperlessId);
+      selected = null;
+};
+
+const deleteDocument = (id) => {
+    fetch('http://localhost:8081/documents?id=' + id, {
+        method: 'DELETE',
+    }).then(_ => fetchDocuments());
 };
 
 const fetchDocuments = () => {
@@ -28,7 +53,9 @@ const fetchDocuments = () => {
     .then(data => {
         data.forEach(doc => {
             const li = document.createElement('li');
+            li.tabIndex = 1;
             li.textContent = doc.title;
+            li.dataset.paperlessId = doc.id;
             list.appendChild(li);
         });
     });

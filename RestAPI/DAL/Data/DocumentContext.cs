@@ -5,7 +5,7 @@ namespace DAL.Data
 {
     public sealed class DocumentContext(DbContextOptions<DocumentContext> options) : DbContext(options)
     {
-        public DbSet<Document>? TodoItems { get; set; }
+        public DbSet<Document>? Documents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

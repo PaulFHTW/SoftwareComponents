@@ -3,19 +3,43 @@ using DAL.Data;
 using DAL.Repositories;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using log4net;
 using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Client.Logging;
 using RestAPI.Mappings;
+using RestAPI.Queue;
+using RestAPI.Utility;
+using ILogger = RestAPI.Utility.ILogger;
+using Minio;
+using Microsoft.VisualBasic;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Microsoft.Extensions.DependencyInjection;
+using FileUploader;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+RabbitInitalizer _rabbitMQ = new RabbitInitalizer();
+_rabbitMQ.RabbitInit();
+builder.Services.AddSingleton<IRabbitInitalizer>(_rabbitMQ);
+builder.Services.AddScoped<IRabbitSender, RabbitSender>();
+
+//FileUpload _minioUpload = new FileUpload();
+//_minioUpload.Upload();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddDbContext<DocumentContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
-builder.Services.AddScoped<IDocumentController, DocumentController>();
+builder.Services.AddScoped<IDocumentController, DocumentController>(); 
+builder.Services.AddScoped<ILogger, Logger>();
+
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddLog4Net();
+});
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 

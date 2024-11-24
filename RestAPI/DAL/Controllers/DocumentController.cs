@@ -4,24 +4,24 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using DAL.Repositories;
+using ILogger = RestAPI.Utility.ILogger;
 
 namespace DAL.Controllers
 {
     [ApiController]
     [Route("api/file")]
-    public class DocumentController(IDocumentRepository repository) : ControllerBase, IDocumentController
+    public class DocumentController(IDocumentRepository repository, ILogger logger) : ControllerBase, IDocumentController
     {
         [HttpGet]
         public async Task<IEnumerable<Document>> GetAsync()
         {
+            logger.Debug("Getting all documents...");
             return await repository.GetAllAsync();
         }
 
         [HttpPost]
         public async Task<IActionResult> PostAsync(Document item)
         {
-            Debug.WriteLine("Hello World 2");
-            
             if (string.IsNullOrWhiteSpace(item.Title))
             {
                 return BadRequest(new { message = "Task name cannot be empty." });
