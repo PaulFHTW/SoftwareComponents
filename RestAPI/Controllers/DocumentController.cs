@@ -18,38 +18,41 @@ namespace RestAPI.Controllers;
 public class DocumentController : ControllerBase
 {    
     private readonly IDocumentController _documentController;
+    private readonly IRabbitSender _rabbitSender;
     private readonly IMapper _mapper;
     private readonly DocumentValidator _validator;
-    private readonly IRabbitSender? _rabbitSender;
     private readonly IMinioClient _minioClient;
     private readonly string BucketName = "test";
 
-    public DocumentController(IDocumentController documentController, IMapper mapper)
+    public DocumentController(IDocumentController documentController, IRabbitSender rabbitSender, IMapper mapper)
     {
         _documentController = documentController;
+        _rabbitSender = rabbitSender;
         _mapper = mapper;
         _validator = new DocumentValidator();
         
         _minioClient = new MinioClient()
-                .WithEndpoint("localhost:9000")
+                .WithEndpoint("minio:9000")
                 .WithCredentials("minioadmin", "minioadmin")
                 .Build();
     }
     
     [HttpPost]
-    public async Task<IActionResult> Upload(IFormFile pdfFile)
+    public async Task<IActionResult> Upload([FromForm] DocumentDTO dtoFile)
     {
-        var file = _mapper.Map<Document>(pdfFile);
+        var file = _mapper.Map<Document>(dtoFile);
         var validation = await _validator.ValidateAsync(file);
+        
+        var pdfFile = dtoFile.File!;
         
         if(!validation.IsValid)
         {
             return BadRequest(validation.Errors);
         }
 
-        string fileName = Guid.NewGuid() + Path.GetExtension(pdfFile.FileName);
-
-        using (var stream = pdfFile.OpenReadStream())
+        var fileName = Guid.NewGuid() + Path.GetExtension(pdfFile.FileName);
+        
+        await using (var stream = pdfFile.OpenReadStream())
         {
             try
             {
@@ -79,7 +82,7 @@ public class DocumentController : ControllerBase
             }      
         }
 
-        _rabbitSender?.SendMessage("document was uploaded");
+        _rabbitSender.SendMessage("document was uploaded");
 
         return await _documentController.PostAsync(file);
     }

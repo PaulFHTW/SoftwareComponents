@@ -23,9 +23,10 @@ var builder = WebApplication.CreateBuilder(args);
 RabbitInitalizer _rabbitMQ = new RabbitInitalizer();
 _rabbitMQ.RabbitInit();
 builder.Services.AddSingleton<IRabbitInitalizer>(_rabbitMQ);
+builder.Services.AddScoped<IRabbitSender, RabbitSender>();
 
-FileUpload _minioUpload = new FileUpload();
-_minioUpload.Upload();
+//FileUpload _minioUpload = new FileUpload();
+//_minioUpload.Upload();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

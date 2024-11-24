@@ -82,7 +82,7 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
     command: server /data --console-address ":9090"
     volumes:
-      - minio-data:/mnt/data
+      - minio-data:/data
 
 # manage the volume which is named db
 volumes:

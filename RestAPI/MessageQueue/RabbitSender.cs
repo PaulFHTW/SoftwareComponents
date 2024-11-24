@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using RabbitMQ.Client;
 
 namespace RestAPI.Queue;
-public class RabbitSender{
-    public int SendMessage(string message){
+public class RabbitSender : IRabbitSender {
+    public void SendMessage(string message){
         ConnectionFactory factory= new ConnectionFactory();
         factory.Uri = new Uri("amqp://user:password@rabbitmq:5672/");
         factory.ClientProvidedName = "RabbitSender";
@@ -25,6 +25,5 @@ public class RabbitSender{
 
         channel.Close();
         conn.Close();
-        return 0;
     }
 }
