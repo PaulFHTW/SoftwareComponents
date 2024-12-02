@@ -2,6 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 
 namespace RestAPI.Queue;
 public class RabbitConsumer : IRabbitConsumer {
@@ -41,11 +42,21 @@ public class RabbitConsumer : IRabbitConsumer {
 
     private string? consumerTag;
     private IModel channel;
-    public void RegisterConsumer(Func<string, string> messageHandler) {
+    public async Task RegisterConsumer(Func<string, string> messageHandler)
+    {
         ConnectionFactory factory = new ConnectionFactory();
         factory.Uri = new Uri("amqp://user:password@rabbitmq:5672/");
         factory.ClientProvidedName = "RabbitSender";
-        IConnection conn = factory.CreateConnection();
+        IConnection? conn; 
+        while (true)
+        {
+            try
+            {
+                conn = factory.CreateConnection();
+                break;
+            }
+            catch (BrokerUnreachableException e) { }
+        }
         channel = conn.CreateModel();
 
         string exchangeName = "NPaperless";

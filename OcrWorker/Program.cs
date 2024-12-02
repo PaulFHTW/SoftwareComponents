@@ -14,7 +14,7 @@ var minioClient = new MinioClient()
     .Build();
 
 var rabbitConsumer = new RabbitConsumer();
-rabbitConsumer.RegisterConsumer(Consumer);
+await rabbitConsumer.RegisterConsumer(Consumer);
 
 Console.WriteLine("OCR consumer registered.");
 
