@@ -87,6 +87,33 @@ services:
     volumes:
       - minio-data:/data
 
+  elastic_search:
+    image: elasticsearch:8.7.1
+    environment:
+      - discovery.type=single-node
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "xpack.security.enabled=false"
+      - "xpack.security.enrollment.enabled=false"
+    # ulimits:
+    #   memlock:
+    #     soft: -1
+    #     hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+
+  kibanba:
+    image: docker.elastic.co/kibana/kibana:8.2.3
+    ports:
+      - 9092:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elastic_search:9200
+      - XPACK_SECURITY_ENABLED=false
+    depends_on:
+      - elastic_search
+
 # manage the volume which is named db
 volumes:
   db:
