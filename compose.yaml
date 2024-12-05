@@ -96,6 +96,8 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "xpack.security.enabled=false"
       - "xpack.security.enrollment.enabled=false"
+      #- "logger.level=INFO"
+      - "logger.level=ERROR"
     # ulimits:
     #   memlock:
     #     soft: -1
@@ -111,6 +113,8 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elastic_search:9200
       - XPACK_SECURITY_ENABLED=false
+      #- "logger.level=INFO"
+      - "logger.level=ERROR"
     depends_on:
       - elastic_search
 

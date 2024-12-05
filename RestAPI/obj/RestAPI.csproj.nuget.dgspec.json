@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/modex/fh/swkom/SoftwareComponents/RestAPI/RestAPI.csproj": {}
+    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj": {}
   },
   "projects": {
-    "/home/modex/fh/swkom/SoftwareComponents/RestAPI/RestAPI.csproj": {
+    "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/modex/fh/swkom/SoftwareComponents/RestAPI/RestAPI.csproj",
+        "projectUniqueName": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
         "projectName": "RestAPI",
-        "projectPath": "/home/modex/fh/swkom/SoftwareComponents/RestAPI/RestAPI.csproj",
-        "packagesPath": "/home/modex/.nuget/packages/",
-        "outputPath": "/home/modex/fh/swkom/SoftwareComponents/RestAPI/obj/",
+        "projectPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/RestAPI.csproj",
+        "packagesPath": "/home/nero/.nuget/packages/",
+        "outputPath": "/home/nero/FH-Folder/WS2024/Software_Komponenten/SoftwareComponents/RestAPI/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/modex/.nuget/NuGet/NuGet.Config"
+          "/home/nero/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -98,12 +98,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[8.0.8, 8.0.8]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -112,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.108/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.110/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
