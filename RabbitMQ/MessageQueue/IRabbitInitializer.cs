@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace RestAPI.Queue;
+namespace MessageQueue;
 
 public interface IRabbitInitalizer{
     

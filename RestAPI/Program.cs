@@ -7,7 +7,7 @@ using log4net;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client.Logging;
 using RestAPI.Mappings;
-using RestAPI.Queue;
+using MessageQueue;
 using RestAPI.Utility;
 using ILogger = RestAPI.Utility.ILogger;
 using Minio;

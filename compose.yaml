@@ -55,7 +55,7 @@ services:
         - "5672:5672"
         - "9093:15672"
       healthcheck:
-        test: rabbitmq-diagnostics -q ping
+        test: rabbitmq-diagnostics -q check_port_listener 5672
         interval: 10s
         timeout: 10s
         retries: 3

@@ -2,7 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using RabbitMQ.Client;
 
-namespace RestAPI.Queue;
+namespace MessageQueue;
 public class RabbitSender : IRabbitSender {
     public void SendMessage(string message){
         ConnectionFactory factory= new ConnectionFactory();

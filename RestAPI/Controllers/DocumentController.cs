@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using DAL.Repositories;
 using RestAPI.DTO;
 using RestAPI.DVO;
-using RestAPI.Queue;
+using MessageQueue;
+using MessageQueue.Messages;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
-using RestAPI.Queue.Messages;
 
 namespace RestAPI.Controllers;
 

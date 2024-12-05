@@ -5,8 +5,8 @@ using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 using NPaperless.OCRLibrary;
-using RestAPI.Queue;
-using RestAPI.Queue.Messages;
+using MessageQueue;
+using MessageQueue.Messages;
 
 var minioClient = new MinioClient()
     .WithEndpoint("minio:9000")
