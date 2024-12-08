@@ -101,4 +101,9 @@ public class DocumentController : ControllerBase
     {
         return await _documentController.DeleteAsync(id);
     }
+
+    [HttpPut]
+    public async Task<IActionResult> Update([FromQuery] int id, Document file){
+        return await _documentController.PutAsync(id, file);
+    }
 }
