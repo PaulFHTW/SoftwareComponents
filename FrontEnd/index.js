@@ -33,6 +33,19 @@ form.onsubmit = (event) => {
     });
 };
 
+updateButton.onclick = (event) => {
+    if(!selected) return;
+
+    updateDocument(selected.dataset.paperlessId);
+    selected = null;
+}
+
+const updateDocument = (id) => {
+    fetch('http://localhost:8081/documents?id=' + id, {
+        method: 'PUT',
+    }).then(_ => fetchDocuments());
+}
+
 deleteButton.onclick = (event) => {
       if(!selected) return;
       

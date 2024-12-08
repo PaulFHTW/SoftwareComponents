@@ -16,6 +16,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="Minio" Version="6.0.3" />
+    <ProjectReference Include="../RabbitMQ/RabbitMQ.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="docs\HelloWorld.pdf">

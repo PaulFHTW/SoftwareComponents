@@ -2,8 +2,9 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using RabbitMQ.Client.Exceptions;
 
-namespace RestAPI.Queue;
+namespace MessageQueue;
 public class RabbitConsumer : IRabbitConsumer {
     public void ReceiveMessage(){
         ConnectionFactory factory= new ConnectionFactory();
@@ -38,13 +39,25 @@ public class RabbitConsumer : IRabbitConsumer {
         channel.Close();
         conn.Close();
     }
-    
-    public void RegisterConsumer(Func<string, string> messageHandler) {
+
+    private string? consumerTag;
+    private IModel channel;
+    public async Task RegisterConsumer(Func<string, string> messageHandler)
+    {
         ConnectionFactory factory = new ConnectionFactory();
         factory.Uri = new Uri("amqp://user:password@rabbitmq:5672/");
         factory.ClientProvidedName = "RabbitSender";
-        IConnection conn = factory.CreateConnection();
-        RabbitMQ.Client.IModel channel = conn.CreateModel();
+        IConnection? conn; 
+        while (true)
+        {
+            try
+            {
+                conn = factory.CreateConnection();
+                break;
+            }
+            catch (BrokerUnreachableException e) { }
+        }
+        channel = conn.CreateModel();
 
         string exchangeName = "NPaperless";
         string routingKey = "NPaperless-Routing-Key";
@@ -65,13 +78,18 @@ public class RabbitConsumer : IRabbitConsumer {
 
             channel.BasicAck(args.DeliveryTag, multiple: false);
         };
-
+        
         consumer.Received += (_, msg) =>
         {
             messageHandler(Encoding.UTF8.GetString(msg.Body.ToArray()));
         };
 
-        string consumerTag = channel.BasicConsume(queueName, autoAck: false, consumer);
-        channel.BasicCancel(consumerTag);
+        consumerTag = channel.BasicConsume(queueName, autoAck: false, consumer);
+    }
+    
+    public void CancelConsumer() {
+        if(consumerTag != null){
+            channel.BasicCancel(consumerTag);
+        }
     }
 }

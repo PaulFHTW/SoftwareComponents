@@ -1,4 +1,4 @@
-namespace RestAPI.Queue.Messages;
+namespace MessageQueue.Messages;
 
 public class DocumentUploadedMessage
 {

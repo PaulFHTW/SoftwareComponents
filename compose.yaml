@@ -55,7 +55,7 @@ services:
         - "5672:5672"
         - "9093:15672"
       healthcheck:
-        test: rabbitmq-diagnostics -q ping
+        test: rabbitmq-diagnostics -q check_port_listener 5672
         interval: 10s
         timeout: 10s
         retries: 3
@@ -96,6 +96,8 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "xpack.security.enabled=false"
       - "xpack.security.enrollment.enabled=false"
+      #- "logger.level=INFO"
+      - "logger.level=ERROR"
     # ulimits:
     #   memlock:
     #     soft: -1
@@ -111,6 +113,8 @@ services:
     environment:
       - ELASTICSEARCH_HOSTS=http://elastic_search:9200
       - XPACK_SECURITY_ENABLED=false
+      #- "logger.level=INFO"
+      - "logger.level=ERROR"
     depends_on:
       - elastic_search
 
