@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestAPITests", "UnitTests\R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ", "RabbitMQ\RabbitMQ.csproj", "{EFDC5E70-C294-437A-A616-E98F8FBEBF59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kibana", "Kibana\Kibana.csproj", "{FCD36025-CE8E-40EF-AA09-A74E40BAA7A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{EFDC5E70-C294-437A-A616-E98F8FBEBF59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFDC5E70-C294-437A-A616-E98F8FBEBF59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFDC5E70-C294-437A-A616-E98F8FBEBF59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCD36025-CE8E-40EF-AA09-A74E40BAA7A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCD36025-CE8E-40EF-AA09-A74E40BAA7A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCD36025-CE8E-40EF-AA09-A74E40BAA7A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCD36025-CE8E-40EF-AA09-A74E40BAA7A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
