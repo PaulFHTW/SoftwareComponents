@@ -12,6 +12,7 @@ using MessageQueue.Messages;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
+using ILogger = RestAPI.Utility.ILogger;
 
 namespace RestAPI.Controllers;
 
@@ -22,15 +23,17 @@ public class DocumentController : ControllerBase
     private readonly IDocumentController _documentController;
     private readonly IRabbitSender _rabbitSender;
     private readonly IMapper _mapper;
+    private readonly ILogger _logger;
     private readonly DocumentValidator _validator;
     private readonly IMinioClient _minioClient;
     private readonly string BucketName = "test";
 
-    public DocumentController(IDocumentController documentController, IRabbitSender rabbitSender, IMapper mapper)
+    public DocumentController(IDocumentController documentController, IRabbitSender rabbitSender, IMapper mapper, ILogger logger)
     {
         _documentController = documentController;
         _rabbitSender = rabbitSender;
         _mapper = mapper;
+        _logger = logger;
         _validator = new DocumentValidator();
         
         _minioClient = new MinioClient()
@@ -42,6 +45,7 @@ public class DocumentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Upload([FromForm] DocumentDTO dtoFile)
     {
+        _logger.Debug("UPLOADING FILE.....");
         var file = _mapper.Map<Document>(dtoFile);
         var validation = await _validator.ValidateAsync(file);
         
@@ -103,7 +107,12 @@ public class DocumentController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromQuery] int id, Document file){
-        return await _documentController.PutAsync(id, file);
+    public async Task<IActionResult> Update([FromQuery] int id, [FromBody] DocumentUpdateDTO updateDto)
+    {
+        _logger.Debug("UPDATE TRIGGERED FOR ID " + id);
+        var document = await _documentController.GetAsyncById(id);
+        document.Title = updateDto.Title!;
+        
+        return await _documentController.PutAsync(id, document);
     }
 }
