@@ -21,17 +21,11 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="Minio" Version="6.0.3" />
     <ProjectReference Include="../RabbitMQ/RabbitMQ.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DAL" />
-    <Folder Include="RabbitMQ" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Utility\log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\Logging\Logging.csproj" />
+    <ProjectReference Include="..\NMinio\NMinio.csproj" />
+    <PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.16.3" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

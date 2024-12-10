@@ -8,7 +8,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.sln
+# *.sln
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -46,7 +46,7 @@ dlldata.c
 project.lock.json
 project.fragment.lock.json
 artifacts/
-**/Properties/launchSettings.json
+# **/Properties/launchSettings.json
 
 # VS Code
 .vscode/
@@ -293,4 +293,10 @@ __pycache__/
 
 **/bin/*
 **/obj/*
+
+**/bin
+**/obj
+
+**/bin/
+**/obj/
 

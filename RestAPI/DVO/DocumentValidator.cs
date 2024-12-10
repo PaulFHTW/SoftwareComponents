@@ -19,8 +19,5 @@ public class DocumentValidator : AbstractValidator<Document>
         
         RuleFor(doc => doc.UploadDate)
             .NotNull().WithMessage("Upload date is required");
-
-        RuleFor(doc => doc.Path)
-            .NotNull().WithMessage("Path is required");
     }
 }

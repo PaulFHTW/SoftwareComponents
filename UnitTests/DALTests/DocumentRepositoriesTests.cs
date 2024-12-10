@@ -39,8 +39,8 @@ namespace DAL.Tests.Repositories
             // Arrange
             var documents = new List<Document>
             {
-                new Document(1, "Title 1", DateTime.Now, "/path/1"),
-                new Document(2, "Title 2", DateTime.Now, "/path/2")
+                new Document(1, "Title 1",  "", DateTime.Now),
+                new Document(2, "Title 2",  "", DateTime.Now)
             };
             _context.Documents.AddRange(documents);
             await _context.SaveChangesAsync();
@@ -56,7 +56,7 @@ namespace DAL.Tests.Repositories
         public async Task GetByIdAsync_ShouldReturnDocument_WhenDocumentExists()
         {
             // Arrange
-            var document = new Document(1, "Title 1", DateTime.Now, "/path/1");
+            var document = new Document(1, "Title 1", "", DateTime.Now);
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
@@ -82,7 +82,7 @@ namespace DAL.Tests.Repositories
         public async Task AddAsync_ShouldAddDocument()
         {
             // Arrange
-            var document = new Document(3, "Title 3", DateTime.Now, "/path/3");
+            var document = new Document(3, "Title 3",  "", DateTime.Now);
 
             // Act
             await _repository.AddAsync(document);
@@ -97,7 +97,7 @@ namespace DAL.Tests.Repositories
         public async Task UpdateAsync_ShouldUpdateDocument()
         {
             // Arrange
-            var document = new Document(4, "Title 4", DateTime.Now, "/path/4");
+            var document = new Document(4, "Title 4", "", DateTime.Now);
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
@@ -117,7 +117,7 @@ namespace DAL.Tests.Repositories
         public async Task DeleteAsync_ShouldRemoveDocument_WhenDocumentExists()
         {
             // Arrange
-            var document = new Document(5, "Title 5", DateTime.Now, "/path/5");
+            var document = new Document(5, "Title 5", "", DateTime.Now);
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
