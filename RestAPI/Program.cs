@@ -1,21 +1,15 @@
 using DAL.Controllers;
 using DAL.Data;
 using DAL.Repositories;
-using FluentValidation;
+using ElasticSearch;
 using FluentValidation.AspNetCore;
-using log4net;
 using Microsoft.EntityFrameworkCore;
-using RabbitMQ.Client.Logging;
 using RestAPI.Mappings;
 using MessageQueue;
-using RestAPI.Utility;
-using ILogger = RestAPI.Utility.ILogger;
+using ILogger = Logging.ILogger;
 using Minio;
-using Microsoft.VisualBasic;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using Microsoft.Extensions.DependencyInjection;
-using FileUploader;
-using System.Net.Http.Headers;
+using Logging;
+using NMinio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +18,8 @@ RabbitInitalizer _rabbitMQ = new RabbitInitalizer();
 _rabbitMQ.RabbitInit();
 builder.Services.AddSingleton<IRabbitInitalizer>(_rabbitMQ);
 builder.Services.AddScoped<IRabbitSender, RabbitSender>();
+builder.Services.AddScoped<IMinioClient>(_ => new MinioFactory(builder.Configuration).Create());
+builder.Services.AddScoped<ISearchIndex, SearchIndex>();
 
 //FileUpload _minioUpload = new FileUpload();
 //_minioUpload.Upload();
@@ -33,7 +29,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<DocumentContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
-builder.Services.AddScoped<IDocumentController, DocumentController>(); 
+builder.Services.AddScoped<IDocumentManager, DocumentManager>(); 
 builder.Services.AddScoped<ILogger, Logger>();
 
 builder.Services.AddLogging(loggingBuilder =>

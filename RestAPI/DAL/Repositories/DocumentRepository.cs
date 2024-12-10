@@ -16,10 +16,12 @@ namespace DAL.Repositories
             return (await context.Documents!.FindAsync(id))!;
         }
 
-        public async Task AddAsync(Document item)
+        public async Task<int> AddAsync(Document item)
         {
-            await context.Documents!.AddAsync(item);
+            var entry = await context.Documents!.AddAsync(item);
             await context.SaveChangesAsync();
+            
+            return entry.Entity.Id;
         }
 
         public async Task UpdateAsync(Document item)

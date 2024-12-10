@@ -41,6 +41,6 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Explicitly copy the log4net.config file if it's in the Utility folder
-COPY ./RestAPI/Utility/log4net.config ./log4net.config
+COPY ./Logging/log4net.config ./log4net.config
 
 ENTRYPOINT ["dotnet", "RestAPI.dll"]

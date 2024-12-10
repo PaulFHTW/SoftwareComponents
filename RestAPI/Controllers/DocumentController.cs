@@ -5,6 +5,7 @@ using DAL.Controllers;
 using DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 using DAL.Repositories;
+using ElasticSearch;
 using RestAPI.DTO;
 using RestAPI.DVO;
 using MessageQueue;
@@ -12,7 +13,7 @@ using MessageQueue.Messages;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
-using ILogger = RestAPI.Utility.ILogger;
+using ILogger = Logging.ILogger;
 
 namespace RestAPI.Controllers;
 
@@ -20,26 +21,24 @@ namespace RestAPI.Controllers;
 [Route("documents")]
 public class DocumentController : ControllerBase
 {    
-    private readonly IDocumentController _documentController;
+    private readonly IDocumentManager _documentManager;
     private readonly IRabbitSender _rabbitSender;
+    private readonly ISearchIndex _searchIndex;
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
     private readonly DocumentValidator _validator;
     private readonly IMinioClient _minioClient;
     private readonly string BucketName = "test";
 
-    public DocumentController(IDocumentController documentController, IRabbitSender rabbitSender, IMapper mapper, ILogger logger)
+    public DocumentController(IDocumentManager documentManager, IRabbitSender rabbitSender, IMinioClient minioClient, ISearchIndex searchIndex, IMapper mapper, ILogger logger)
     {
-        _documentController = documentController;
+        _documentManager = documentManager;
         _rabbitSender = rabbitSender;
+        _searchIndex = searchIndex;
         _mapper = mapper;
         _logger = logger;
         _validator = new DocumentValidator();
-        
-        _minioClient = new MinioClient()
-                .WithEndpoint("minio:9000")
-                .WithCredentials("minioadmin", "minioadmin")
-                .Build();
+        _minioClient = minioClient;
     }
     
     [HttpPost]
@@ -90,29 +89,41 @@ public class DocumentController : ControllerBase
 
         file.Path = fileName;
         
-        _rabbitSender.SendMessage(JsonSerializer.Serialize(new DocumentUploadedMessage(fileName, "Document was uploaded successfully!" )));
-        return await _documentController.PostAsync(file);
+        var res = await _documentManager.PostAsync(file);
+        if(res is not OkObjectResult ok) return res;
+        
+        _rabbitSender.SendMessage(JsonSerializer.Serialize(new DocumentUploadedMessage(fileName, (int) (ok.Value ?? 0), file.Title, "Document was uploaded successfully!" )));
+        return res;
     }
     
-    [HttpGet]
+    [HttpGet("")]
     public async Task<IEnumerable<Document>> GetAll()
     {
-        return await _documentController.GetAsync();
+        return await _documentManager.GetAsync();
     }
 
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] int id)
     {
-        return await _documentController.DeleteAsync(id);
+        return await _documentManager.DeleteAsync(id);
     }
-
+    
     [HttpPut]
     public async Task<IActionResult> Update([FromQuery] int id, [FromBody] DocumentUpdateDTO updateDto)
     {
         _logger.Debug("UPDATE TRIGGERED FOR ID " + id);
-        var document = await _documentController.GetAsyncById(id);
+        var document = await _documentManager.GetAsyncById(id);
         document.Title = updateDto.Title!;
         
-        return await _documentController.PutAsync(id, document);
+        return await _documentManager.PutAsync(id, document);
+    }
+    
+    [HttpGet("search")]
+    public async Task<IEnumerable<Document>> Search([FromQuery] string q)
+    {
+        var documents = await _searchIndex.SearchDocumentAsync(q);
+        _logger.Debug("SEARCHING FOR " + q);
+        _logger.Debug(documents);
+        return documents;
     }
 }

@@ -1,4 +1,4 @@
-namespace RestAPI.Utility;
+namespace Logging;
 
 public interface ILogger
 {

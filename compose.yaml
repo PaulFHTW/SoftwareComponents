@@ -105,6 +105,8 @@ services:
     ports:
       - 9200:9200
       - 9300:9300
+    volumes:
+        - elastic-data:/usr/share/elasticsearch/data
 
   kibanba:
     image: docker.elastic.co/kibana/kibana:8.2.3
@@ -122,3 +124,4 @@ services:
 volumes:
   db:
   minio-data:
+  elastic-data:

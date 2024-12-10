@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DAL.Controllers;
 
-public interface IDocumentController
+public interface IDocumentManager
 {
     public Task<IEnumerable<Document>> GetAsync();
     public Task<Document> GetAsyncById(int id);

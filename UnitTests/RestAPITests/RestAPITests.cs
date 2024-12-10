@@ -1,22 +1,11 @@
 using NUnit.Framework;
 using Moq;
-using System.Net.Http;
-using System.Net;
-using System.Threading.Tasks;
-using RestAPI.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Net.Http.Json;
-using DAL.Entities;
 using DAL.Repositories;
 using AutoMapper;
-using System.Linq;
-using System.Threading;
-using DAL.Controllers;
-using RestAPI.DTO;
-using FluentValidation.Results;
 using RestAPI.DVO;
 using RichardSzalay.MockHttp;
+using Logging;
 
 
 namespace RestAPI.Tests{
@@ -26,12 +15,11 @@ namespace RestAPI.Tests{
     {
         private Mock<IHttpClientFactory> _httpClientFactoryMock;
         private Mock<IMapper> _mapperMock;
-        private Mock<RestAPI.Utility.ILogger> _logMock;
+        private Mock<ILogger> _logMock;
         private Mock<IDocumentRepository> _documentControllerMock;
         private HttpClient _httpClient;
         private HttpMessageHandler _httpMessageHandler;
-        private DefaultController _defaultController;
-        private DAL.Controllers.DocumentController _documentController;
+        private DAL.Controllers.DocumentManager _documentManager;
         private Mock<DocumentValidator> _mockValidator;
 
         [SetUp]
@@ -40,14 +28,13 @@ namespace RestAPI.Tests{
             _mapperMock = new Mock<IMapper>();
             _documentControllerMock = new Mock<IDocumentRepository>();
             _mockValidator = new Mock<DocumentValidator>();
-            _logMock = new Mock<RestAPI.Utility.ILogger>();
+            _logMock = new Mock<ILogger>();
 
             _httpMessageHandler = new MockHttpMessageHandler();
             _httpClient = new HttpClient(_httpMessageHandler);
             _httpClientFactoryMock.Setup(factory => factory.CreateClient(It.IsAny<string>())).Returns(_httpClient);
 
-            _defaultController = new DefaultController(_httpClientFactoryMock.Object, _mapperMock.Object);
-            _documentController = new DAL.Controllers.DocumentController(_documentControllerMock.Object, _logMock.Object);
+            _documentManager = new DAL.Controllers.DocumentManager(_documentControllerMock.Object, _logMock.Object);
         }
 
         [Test]

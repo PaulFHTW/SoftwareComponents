@@ -2,7 +2,7 @@ using System.Reflection;
 using log4net;
 using log4net.Config;
 
-namespace RestAPI.Utility;
+namespace Logging;
 
 public class Logger : ILogger
 {

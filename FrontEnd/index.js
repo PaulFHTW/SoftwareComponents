@@ -1,16 +1,19 @@
 const list = document.querySelector('ul');
-const form = document.querySelector('form');
+const form = document.getElementById('uploadForm');
 const file = document.querySelector('input[type="file"]');
 const deleteButton = document.getElementById("delete");
 const updateButton = document.getElementById("update");
+const searchField = document.getElementById("search");
+const searchForm = document.getElementById("searchForm");
+const searchClear = document.getElementById("clear");
 
-var selected = null;
+let selected = null;
 
 document.querySelector('ul').addEventListener('click', function(e) {
     if(e.target.tagName == 'LI') {
         selected = e.target;
         
-        var otherSelected = document.querySelector('li.selected');                   
+        let otherSelected = document.querySelector('li.selected');                   
         if (otherSelected) otherSelected.classList.remove('selected');
 
         e.target.className = 'selected';
@@ -81,6 +84,38 @@ const fetchDocuments = () => {
             list.appendChild(li);
         });
     });
+}
+
+const searchDocuments = (query) => {
+    list.innerHTML = '';
+    selected = null;
+    fetch('http://localhost:8081/documents/search?q=' + query)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(doc => {
+                const li = document.createElement('li');
+                li.tabIndex = 1;
+                li.textContent = doc.title;
+                li.dataset.paperlessId = doc.id;
+                list.appendChild(li);
+            });
+        });
+}
+
+searchForm.onsubmit = (event) => {
+    event.preventDefault();
+    searchDocuments(searchField.value);
+}
+
+searchField.oninput = (event) => {
+    if(searchField.value === "") fetchDocuments();
+}
+
+clear.onclick = (event) => {
+    if(searchField.value === "") return;
+
+    searchField.value = "";
+    fetchDocuments();
 }
 
 fetchDocuments();

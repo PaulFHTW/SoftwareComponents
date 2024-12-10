@@ -10,11 +10,11 @@ using System.Threading.Tasks.Dataflow;
 using DAL.Entities;
 using ElasticSearch;
 using Elastic.Clients.Elasticsearch;
+using NMinio;
 
-var minioClient = new MinioClient()
-    .WithEndpoint("minio:9000")
-    .WithCredentials("minioadmin", "minioadmin")
-    .Build();
+var builder = WebApplication.CreateBuilder(args);
+
+var minioClient = new MinioFactory(builder.Configuration).Create();
 
 var rabbitConsumer = new RabbitConsumer();
 await rabbitConsumer.RegisterConsumer(Consumer);
@@ -29,9 +29,11 @@ string Consumer(string message)
     try
     {
         Console.WriteLine($"Message Received: {message}");
+        var minioPath = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.MinioPath;
+        var documentTitle = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.DocumentTitle;
         var documentId = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.DocumentId;
-        Console.WriteLine($"Performing OCR for document {documentId}");
-        PerformOcr(documentId);
+        Console.WriteLine($"Performing OCR for document {minioPath}");
+        PerformOcr(minioPath, documentId, documentTitle);
     }
     catch (Exception _)
     {
@@ -41,7 +43,7 @@ string Consumer(string message)
     return message;
 }
 
-async void PerformOcr(string filePath)
+async void PerformOcr(string filePath, int id, string title)
 {
     const string bucketName = "test";
     
@@ -81,8 +83,8 @@ async void PerformOcr(string filePath)
                     var ocrContentText = ocrClient.OcrPdf(stream);
                     Console.WriteLine(ocrContentText);
                     //Add document to kibana
-                    Document document = new Document(1, "title", ocrContentText, DateTime.Now, filePath);
-                    var ElasticSearchIndex = new ElasticSearchIndex();
+                    Document document = new Document(id, title, ocrContentText, DateTime.Now, filePath);
+                    var ElasticSearchIndex = new SearchIndex();
                     ElasticSearchIndex.AddDocumentAsync(document);
                 }
                 catch (IOException e)

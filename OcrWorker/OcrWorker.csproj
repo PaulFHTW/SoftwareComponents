@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -17,7 +17,6 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="Minio" Version="6.0.3" />
     <ProjectReference Include="../RabbitMQ/RabbitMQ.csproj" />
-    <ProjectReference Include="../Kibana/Kibana.csproj" />
     <ProjectReference Include="../RestAPI/RestAPI.csproj" />
   </ItemGroup>
   <ItemGroup>

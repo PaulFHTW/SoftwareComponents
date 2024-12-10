@@ -10,7 +10,16 @@
 <body>
     <h3>NPaperless</h3>
 
-    <form method="post">
+    <search>
+        <form id="searchForm">
+            <label for="search">Search</label>
+            <input type="text" id="search" placeholder="Search">
+            <input type="submit">
+            <input id="clear" type="button" value="Clear">
+        </form>
+    </search>
+    
+    <form id="uploadForm">
         <input type="file" id="myFile" name="filename" required>
         <input type="submit">
     </form>
