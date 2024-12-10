@@ -1,18 +1,25 @@
-namespace ElasticSearch;
-
 using System.Diagnostics;
 using Elastic.Clients.Elasticsearch;
 using Elastic.Clients.Elasticsearch.QueryDsl;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using DAL.Entities;
+using System.Security.Policy;
+using ILogger = RestAPI.Utility.ILogger;
+using RestAPI.Utility;
 
+namespace ElasticSearch;
 public class ElasticSearchIndex : ISearchIndex
 {
     private readonly Uri _uri;
-    private readonly ILogger<ElasticSearchIndex> _logger;
+    private readonly ILogger _logger;
 
-    public ElasticSearchIndex(IConfiguration configuration, ILogger<ElasticSearchIndex> logger)
+    public ElasticSearchIndex()
+    {
+        _uri = new Uri("http://elastic_search:9200/");
+        _logger = new Logger();
+    }
+    public ElasticSearchIndex(IConfiguration configuration, ILogger logger)
     {
         this._uri = new Uri(configuration.GetConnectionString("ElasticSearch") ?? "http://localhost:9200/");
         this._logger = logger;
@@ -30,12 +37,10 @@ public class ElasticSearchIndex : ISearchIndex
         if (!indexResponse.IsSuccess())
         {
             // Handle errors
-            _logger.LogError($"Failed to index document: {indexResponse.DebugInformation}\n{indexResponse.ElasticsearchServerError}");
+            _logger.Error($"Failed to index document: {indexResponse.DebugInformation}\n{indexResponse.ElasticsearchServerError}");
 
             throw new Exception($"Failed to index document: {indexResponse.DebugInformation}\n{indexResponse.ElasticsearchServerError}");
         }
-
-
     }
 
     [Obsolete]

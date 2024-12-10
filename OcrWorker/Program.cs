@@ -1,5 +1,4 @@
 ﻿// See https://aka.ms/new-console-template for more information
-
 using System.Text.Json;
 using Minio;
 using Minio.DataModel.Args;
@@ -7,6 +6,10 @@ using Minio.Exceptions;
 using NPaperless.OCRLibrary;
 using MessageQueue;
 using MessageQueue.Messages;
+using System.Threading.Tasks.Dataflow;
+using DAL.Entities;
+using ElasticSearch;
+using Elastic.Clients.Elasticsearch;
 
 var minioClient = new MinioClient()
     .WithEndpoint("minio:9000")
@@ -77,6 +80,10 @@ async void PerformOcr(string filePath)
                     var ocrClient = new OcrClient(new OcrOptions());
                     var ocrContentText = ocrClient.OcrPdf(stream);
                     Console.WriteLine(ocrContentText);
+                    //Add document to kibana
+                    Document document = new Document(1, "title", ocrContentText, DateTime.Now, filePath);
+                    var ElasticSearchIndex = new ElasticSearchIndex();
+                    ElasticSearchIndex.AddDocumentAsync(document);
                 }
                 catch (IOException e)
                 {
