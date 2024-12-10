@@ -36,13 +36,14 @@ jobs:
     - name: Publish Test Results
       if: always()
       run: |
-        mkdir -p $(Build.ArtifactStagingDirectory)/test-results
+        mkdir -p $GITHUB_WORKSPACE/test-results
         dotnet test ./UnitTests/DALTests/DALTests.csproj --configuration Release --no-build --logger "trx;LogFileName=test-RESULTS-DALTests.trx"
         dotnet test ./UnitTests/RestAPITests/RestAPITests.csproj --configuration Release --no-build --logger "trx;LogFileName=test-RESULTS-RestAPITests.trx"
-        mv *.trx $(Build.ArtifactStagingDirectory)/test-results/
-
+        mv *.trx $GITHUB_WORKSPACE/test-results/
+    
     - name: Upload Test Results
       uses: actions/upload-artifact@v3
       with:
         name: test-results
-        path: $(Build.ArtifactStagingDirectory)/test-results
+        path: $GITHUB_WORKSPACE/test-results
+
