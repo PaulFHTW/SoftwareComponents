@@ -4,5 +4,5 @@ namespace NMinio;
 
 public interface IMinioFactory
 {
-    public IMinioClient Create();
+    public INMinioClient Create();
 }

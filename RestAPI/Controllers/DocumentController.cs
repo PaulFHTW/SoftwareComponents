@@ -13,6 +13,7 @@ using MessageQueue.Messages;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
+using NMinio;
 using ILogger = Logging.ILogger;
 
 namespace RestAPI.Controllers;
@@ -27,10 +28,10 @@ public class DocumentController : ControllerBase
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
     private readonly DocumentValidator _validator;
-    private readonly IMinioClient _minioClient;
+    private readonly INMinioClient _minioClient;
     private readonly string BucketName = "test";
 
-    public DocumentController(IDocumentManager documentManager, IRabbitSender rabbitSender, IMinioClient minioClient, ISearchIndex searchIndex, IMapper mapper, ILogger logger)
+    public DocumentController(IDocumentManager documentManager, IRabbitSender rabbitSender, INMinioClient minioClient, ISearchIndex searchIndex, IMapper mapper, ILogger logger)
     {
         _documentManager = documentManager;
         _rabbitSender = rabbitSender;
@@ -55,44 +56,12 @@ public class DocumentController : ControllerBase
             return BadRequest(validation.Errors);
         }
 
-        var fileName = Guid.NewGuid() + Path.GetExtension(pdfFile.FileName);
-        
-        await using (var stream = pdfFile.OpenReadStream())
-        {
-            try
-            {
-                // Make a bucket on the server, if not already present.
-                var beArgs = new BucketExistsArgs()
-                    .WithBucket(BucketName);
-                bool found = await _minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
-                if (!found)
-                {
-                    var mbArgs = new MakeBucketArgs()
-                        .WithBucket(BucketName);
-                    await _minioClient.MakeBucketAsync(mbArgs).ConfigureAwait(false);
-                }
-                // Upload a file to bucket.
-                var putObjectArgs = new PutObjectArgs()
-                    .WithBucket(BucketName)
-                    .WithObject(fileName)
-                    .WithStreamData(stream)
-                    .WithObjectSize(pdfFile.Length)
-                    .WithContentType("application/pdf");
-                await _minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
-                Console.WriteLine("Successfully uploaded " + fileName );
-            }
-            catch (MinioException e)
-            {
-                Console.WriteLine("File Upload Error: {0}", e.Message);
-            }      
-        }
-
-        file.Path = fileName;
+        await _minioClient.Upload(file, pdfFile);
         
         var res = await _documentManager.PostAsync(file);
         if(res is not OkObjectResult ok) return res;
         
-        _rabbitSender.SendMessage(JsonSerializer.Serialize(new DocumentUploadedMessage(fileName, (int) (ok.Value ?? 0), file.Title, "Document was uploaded successfully!" )));
+        _rabbitSender.SendMessage(JsonSerializer.Serialize(new DocumentUploadedMessage( (int) (ok.Value ?? 0), file.Title, "Document was uploaded successfully!" )));
         return res;
     }
     
@@ -125,5 +94,23 @@ public class DocumentController : ControllerBase
         _logger.Debug("SEARCHING FOR " + q);
         _logger.Debug(documents);
         return documents;
+    }
+    
+    [HttpGet("download")]
+    public async Task<IActionResult> Download([FromQuery] int id)
+    {
+        var document = await _documentManager.GetAsyncById(id);
+        if(document == null)
+        {
+            return NotFound();
+        }
+        
+        var stream = await _minioClient.Download(document);
+        if(stream == null)
+        {
+            return NotFound();
+        }
+        
+        return File(stream, "application/pdf", document.Title);
     }
 }

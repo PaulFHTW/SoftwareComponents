@@ -42,7 +42,6 @@ namespace DAL.Controllers
 
             existingItem.Title = item.Title;
             existingItem.UploadDate = item.UploadDate;
-            existingItem.Path = item.Path;
             await repository.UpdateAsync(existingItem);
             return NoContent();
         }

@@ -22,11 +22,11 @@ public class MinioFactory : IMinioFactory
         _secretKey = "minioadmin";
     }
     
-    public IMinioClient Create()
+    public INMinioClient Create()
     {
-        return new MinioClient()
+        return new NMinioClient(new MinioClient()
             .WithEndpoint(_endpoint)
             .WithCredentials(_accessKey, _secretKey)
-            .Build();
+            .Build());
     }
 }

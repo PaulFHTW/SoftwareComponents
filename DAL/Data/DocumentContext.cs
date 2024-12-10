@@ -22,8 +22,6 @@ namespace DAL.Data
                 entity.Property(e => e.UploadDate)
                     .IsRequired()
                     .HasColumnType("timestamp");
-                
-                entity.Property(e => e.Path).IsRequired();
             });
 
             base.OnModelCreating(modelBuilder);

@@ -18,7 +18,7 @@ RabbitInitalizer _rabbitMQ = new RabbitInitalizer();
 _rabbitMQ.RabbitInit();
 builder.Services.AddSingleton<IRabbitInitalizer>(_rabbitMQ);
 builder.Services.AddScoped<IRabbitSender, RabbitSender>();
-builder.Services.AddScoped<IMinioClient>(_ => new MinioFactory(builder.Configuration).Create());
+builder.Services.AddScoped<INMinioClient>(_ => new MinioFactory(builder.Configuration).Create());
 builder.Services.AddScoped<ISearchIndex, SearchIndex>();
 
 //FileUpload _minioUpload = new FileUpload();

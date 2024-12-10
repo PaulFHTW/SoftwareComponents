@@ -1,8 +1,13 @@
 const list = document.querySelector('ul');
 const form = document.getElementById('uploadForm');
 const file = document.querySelector('input[type="file"]');
+
 const deleteButton = document.getElementById("delete");
 const updateButton = document.getElementById("update");
+const openButton = document.getElementById("open");
+const downloadButton = document.getElementById("download");
+const refreshButton = document.getElementById("refresh");
+
 const searchField = document.getElementById("search");
 const searchForm = document.getElementById("searchForm");
 const searchClear = document.getElementById("clear");
@@ -11,6 +16,12 @@ let selected = null;
 
 document.querySelector('ul').addEventListener('click', function(e) {
     if(e.target.tagName == 'LI') {
+        if(selected === e.target) {
+            e.target.classList.remove('selected');
+            selected = null;
+            return;
+        }
+        
         selected = e.target;
         
         let otherSelected = document.querySelector('li.selected');                   
@@ -87,6 +98,8 @@ const fetchDocuments = () => {
 }
 
 const searchDocuments = (query) => {
+    if(query === "") return;
+    
     list.innerHTML = '';
     selected = null;
     fetch('http://localhost:8081/documents/search?q=' + query)
@@ -116,6 +129,36 @@ clear.onclick = (event) => {
 
     searchField.value = "";
     fetchDocuments();
+}
+
+refreshButton.onclick = (event) => {
+    fetchDocuments();
+}
+
+openButton.onclick = (event) => {
+    if(!selected) return;
+    
+    fetch('http://localhost:8081/documents/download?id=' + selected.dataset.paperlessId)
+        .then(response => response.blob())
+        .then( blob => {
+            let file = window.URL.createObjectURL(blob);
+            // Open file in new tab
+            window.open(file);
+        });
+};
+
+downloadButton.onclick = (event) => {
+    if(!selected) return;
+    
+    fetch('http://localhost:8081/documents/download?id=' + selected.dataset.paperlessId)
+        .then(response => response.blob())
+        .then( blob => {
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = selected.textContent;
+            a.click();
+        });
 }
 
 fetchDocuments();
