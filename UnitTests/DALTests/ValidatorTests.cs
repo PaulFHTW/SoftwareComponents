@@ -21,7 +21,7 @@ namespace DAL.Tests.Validator
         public void Validate_ShouldNotHaveError_WhenTitleIsValid()
         {
             // Arrange
-            var document = new Document(1, "Valid Title", "", DateTime.Now);
+            var document = new Document(1, "Valid Title.pdf", "", DateTime.Now);
 
             // Act & Assert
             var result = _validator.TestValidate(document);
