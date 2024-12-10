@@ -2,6 +2,7 @@ const list = document.querySelector('ul');
 const form = document.querySelector('form');
 const file = document.querySelector('input[type="file"]');
 const deleteButton = document.getElementById("delete");
+const updateButton = document.getElementById("update");
 
 var selected = null;
 
@@ -35,14 +36,22 @@ form.onsubmit = (event) => {
 
 updateButton.onclick = (event) => {
     if(!selected) return;
-
-    updateDocument(selected.dataset.paperlessId);
+    
+    const newName = prompt("Enter the new name of the document:");
+    updateDocument(selected.dataset.paperlessId, newName);
     selected = null;
 }
 
-const updateDocument = (id) => {
+const updateDocument = (id, newName) => {
+
+    const updateObj = {
+        "Title": newName
+    };
+
     fetch('http://localhost:8081/documents?id=' + id, {
         method: 'PUT',
+        body: JSON.stringify(updateObj),
+        headers: {'content-type': 'application/json'}
     }).then(_ => fetchDocuments());
 }
 

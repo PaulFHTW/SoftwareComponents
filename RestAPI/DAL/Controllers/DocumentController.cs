@@ -19,6 +19,12 @@ namespace DAL.Controllers
             return await repository.GetAllAsync();
         }
 
+        [HttpGet]
+        public async Task<Document> GetAsyncById(int id)
+        {
+            return await repository.GetByIdAsync(id);
+        }
+
         [HttpPost]
         public async Task<IActionResult> PostAsync(Document item)
         {
