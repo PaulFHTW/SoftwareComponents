@@ -23,15 +23,16 @@ public class Worker : IWorker
         _logger = logger;
     }
 
-    private string Consumer(string message)
+    private async Task<string> Consumer(string message)
     {
         try
         {
             _logger.Info($"Message Received: {message}");
             var documentTitle = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.DocumentTitle;
             var documentId = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.DocumentId;
+            var documentUploadDate = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.UploadDate;
             _logger.Info($"Performing OCR for document {documentTitle}");
-            PerformOcr(documentId, documentTitle);
+            await PerformOcr(documentId, documentTitle, documentUploadDate);
         }
         catch (Exception _)
         {
@@ -41,7 +42,7 @@ public class Worker : IWorker
         return message;
     }
 
-    private async Task PerformOcr(int id, string title)
+    private async Task PerformOcr(int id, string title, DateTime uploadDate)
     {
         var stream = await _minioClient.Download(id.ToString());
 
@@ -57,7 +58,7 @@ public class Worker : IWorker
         _logger.Info("OCR completed!");
     
         // Add document to kibana
-        var document = new Document(id, title, ocrContentText, DateTime.Now);
+        var document = new Document(id, title, ocrContentText, uploadDate);
         await _searchIndex.AddDocumentAsync(document);
         _logger.Info("Document added to elastic search!");
     }

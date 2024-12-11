@@ -38,21 +38,22 @@ document.querySelector('ul').addEventListener('click', function(e) {
     }
 });
 
-form.onsubmit = (event) => {
+form.onsubmit = async (event) => {
     event.preventDefault();
     if(file.files.length === 0) return;
     
-    const formData = new FormData(form);
-    formData.append('file', file.files[0]);
+    for (const f of file.files) {
+        const formData = new FormData(form);
+        formData.append('file', f);
+
+        await fetch('http://localhost:8081/documents', {
+            method: 'POST',
+            body: formData
+        });
+    }
     
-    fetch('http://localhost:8081/documents', {
-        method: 'POST',
-        body: formData
-    })
-    .then(data => {
-        fetchDocuments();
-        form.reset();
-    });
+    fetchDocuments();
+    form.reset();
 };
 
 const updateButtons = () => {

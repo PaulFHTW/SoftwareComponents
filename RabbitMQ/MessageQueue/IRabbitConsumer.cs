@@ -6,6 +6,6 @@ using RabbitMQ.Client.Events;
 namespace MessageQueue;
 public interface IRabbitConsumer{
     public void ReceiveMessage();
-    public Task RegisterConsumer(Func<string, string> messageHandler);
+    public Task RegisterConsumer(Func<string, Task<string>> messageHandler);
     public void CancelConsumer();
 }

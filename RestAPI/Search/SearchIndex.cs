@@ -1,5 +1,6 @@
 using DAL.Entities;
 using Elastic.Clients.Elasticsearch;
+using Elastic.Clients.Elasticsearch.Mapping;
 using Elastic.Clients.Elasticsearch.QueryDsl;
 using Logging;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +30,7 @@ public class SearchIndex : ISearchIndex
     {
         var elasticSettings = new ElasticsearchClientSettings(_uri).DefaultMappingFor<Document>(d => d.IndexName("documents"));
         _elasticClient = new ElasticsearchClient(elasticSettings);
-        
+
         if (!(await _elasticClient.Indices.ExistsAsync("documents")).Exists)
             await _elasticClient.Indices.CreateAsync("documents");
     }

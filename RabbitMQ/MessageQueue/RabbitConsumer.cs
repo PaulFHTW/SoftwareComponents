@@ -42,7 +42,8 @@ public class RabbitConsumer : IRabbitConsumer {
 
     private string? consumerTag;
     private IModel channel;
-    public async Task RegisterConsumer(Func<string, string> messageHandler)
+    private SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
+    public async Task RegisterConsumer(Func<string, Task<string>> messageHandler)
     {
         ConnectionFactory factory = new ConnectionFactory();
         factory.Uri = new Uri("amqp://user:password@rabbitmq:5672/");
@@ -75,13 +76,44 @@ public class RabbitConsumer : IRabbitConsumer {
             string message = Encoding.UTF8.GetString(body);
 
             Console.WriteLine($"Message Received: {message}");
-
-            channel.BasicAck(args.DeliveryTag, multiple: false);
         };
         
+        /*
         consumer.Received += (_, msg) =>
         {
             messageHandler(Encoding.UTF8.GetString(msg.Body.ToArray()));
+            channel.BasicAck(msg.DeliveryTag, multiple: false);
+        };
+        */
+        
+        consumer.Received += async (sender, args) =>
+        {
+            var body = args.Body.ToArray();
+            string message = Encoding.UTF8.GetString(body);
+
+            Console.WriteLine($"Message Received: {message}");
+
+            // Wait for the semaphore to ensure only one handler is executed at a time
+            await semaphoreSlim.WaitAsync();
+
+            try
+            {
+                // Call the message handler asynchronously
+                await messageHandler(message);
+            }
+            catch (Exception ex)
+            {
+                // Log any exception that might occur during message processing
+                Console.WriteLine($"Error processing message: {ex.Message}");
+            }
+            finally
+            {
+                // Acknowledge the message only after the handler is complete
+                channel.BasicAck(args.DeliveryTag, multiple: false);
+                
+                // Release the semaphore so that the next message can be processed
+                semaphoreSlim.Release();
+            }
         };
 
         consumerTag = channel.BasicConsume(queueName, autoAck: false, consumer);
