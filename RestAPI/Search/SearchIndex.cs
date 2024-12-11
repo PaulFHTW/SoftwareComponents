@@ -54,7 +54,7 @@ public class SearchIndex : ISearchIndex
             .Index("documents")
             .Query(q => 
                 q.QueryString(qs => 
-                    qs.Fields(new [] { "content", "title", "id" })
+                    qs.Fields(new [] { "content", "title" })
                         .Query($"*{searchTerm}*")
         )));
 
