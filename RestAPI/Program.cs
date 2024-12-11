@@ -9,13 +9,13 @@ using MessageQueue;
 using ILogger = Logging.ILogger;
 using Logging;
 using NMinio;
+using RabbitMQ;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ILogger, Logger>();
 
 // Add services to the container.
-RabbitInitalizer.RabbitInit();
-builder.Services.AddScoped<IRabbitSender, RabbitSender>();
+builder.Services.AddScoped<IRabbitClient>(sp => ActivatorUtilities.CreateInstance<RabbitFactory>(sp, builder.Configuration, sp.GetRequiredService<ILogger>()).Create("RestAPI"));
 builder.Services.AddScoped<INMinioClient>(sp => ActivatorUtilities.CreateInstance<MinioFactory>(sp, builder.Configuration, sp.GetRequiredService<ILogger>()).Create());
 builder.Services.AddScoped<ISearchIndex, SearchIndex>();
 
@@ -67,7 +67,8 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<DocumentContext>();
-
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
+    
     try
     {
         Console.WriteLine("Versuche, eine Verbindung zur Datenbank herzustellen...");

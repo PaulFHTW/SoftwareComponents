@@ -1,6 +1,6 @@
 namespace NPaperless.OCRLibrary;
 
-public interface IWorker
+public interface IWorker : IDisposable
 {   
     void Start();
 }

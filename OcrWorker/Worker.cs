@@ -4,20 +4,21 @@ using ElasticSearch;
 using MessageQueue;
 using MessageQueue.Messages;
 using NMinio;
+using RabbitMQ;
 using ILogger = Logging.ILogger;
 
 namespace NPaperless.OCRLibrary;
 
 public class Worker : IWorker
 {
-    private readonly IRabbitConsumer _rabbitConsumer;
+    private readonly IRabbitClient _rabbitClient;
     private readonly INMinioClient _minioClient;
     private readonly ISearchIndex _searchIndex;
     private readonly ILogger _logger;
     
-    public Worker(IRabbitConsumer rabbitConsumer, INMinioClient minioClient, ISearchIndex searchIndex, ILogger logger)
+    public Worker(IRabbitClient rabbitClient, INMinioClient minioClient, ISearchIndex searchIndex, ILogger logger)
     {
-        _rabbitConsumer = rabbitConsumer;
+        _rabbitClient = rabbitClient;
         _minioClient = minioClient;
         _searchIndex = searchIndex;
         _logger = logger;
@@ -27,7 +28,6 @@ public class Worker : IWorker
     {
         try
         {
-            _logger.Info($"Message Received: {message}");
             var documentTitle = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.DocumentTitle;
             var documentId = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.DocumentId;
             var documentUploadDate = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.UploadDate;
@@ -65,11 +65,16 @@ public class Worker : IWorker
 
     public void Start()
     {
-        _rabbitConsumer.RegisterConsumer(Consumer);
+        _rabbitClient.RegisterConsumer(Consumer);
     }
 
     public void Stop()
     {
-        _rabbitConsumer.CancelConsumer();
+        _rabbitClient.CancelConsumer();
+    }
+
+    public void Dispose()
+    {
+        _rabbitClient.Dispose();
     }
 }
