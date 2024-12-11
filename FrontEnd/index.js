@@ -7,10 +7,15 @@ const updateButton = document.getElementById("update");
 const openButton = document.getElementById("open");
 const downloadButton = document.getElementById("download");
 const refreshButton = document.getElementById("refresh");
+const viewButton = document.getElementById("view");
 
 const searchField = document.getElementById("search");
 const searchForm = document.getElementById("searchForm");
 const searchClear = document.getElementById("clear");
+
+const previewContainer = document.getElementById("previewContainer");
+const preview = document.getElementById("preview");
+const closePreviewButton = document.getElementById("closePreview");
 
 let selected = null;
 
@@ -19,10 +24,12 @@ document.querySelector('ul').addEventListener('click', function(e) {
         if(selected === e.target) {
             e.target.classList.remove('selected');
             selected = null;
+            updateButtons();
             return;
         }
         
         selected = e.target;
+        updateButtons();
         
         let otherSelected = document.querySelector('li.selected');                   
         if (otherSelected) otherSelected.classList.remove('selected');
@@ -48,12 +55,32 @@ form.onsubmit = (event) => {
     });
 };
 
+const updateButtons = () => {
+    if(selected) {
+        deleteButton.disabled = false;
+        updateButton.disabled = false;
+        openButton.disabled = false;
+        downloadButton.disabled = false;
+        viewButton.disabled = false;
+    } else {
+        deleteButton.disabled = true;
+        updateButton.disabled = true;
+        openButton.disabled = true;
+        downloadButton.disabled = true;
+        viewButton.disabled = true;
+    }
+}
+
 updateButton.onclick = (event) => {
     if(!selected) return;
     
-    const newName = prompt("Enter the new name of the document:");
+    let newName = prompt("Enter the new name of the document:", selected.textContent);
+    if(newName === null || newName === "") return;
+    if(!newName.endsWith('.pdf')) newName += '.pdf';
+    
     updateDocument(selected.dataset.paperlessId, newName);
     selected = null;
+    updateButtons();
 }
 
 const updateDocument = (id, newName) => {
@@ -74,6 +101,7 @@ deleteButton.onclick = (event) => {
       
       deleteDocument(selected.dataset.paperlessId);
       selected = null;
+      updateButtons();
 };
 
 const deleteDocument = (id) => {
@@ -102,6 +130,7 @@ const searchDocuments = (query) => {
     
     list.innerHTML = '';
     selected = null;
+    updateButtons();
     fetch('http://localhost:8081/documents/search?q=' + query)
         .then(response => response.json())
         .then(data => {
@@ -142,9 +171,35 @@ openButton.onclick = (event) => {
         .then(response => response.blob())
         .then( blob => {
             let file = window.URL.createObjectURL(blob);
-            // Open file in new tab
             window.open(file);
         });
+};
+
+// https://stackoverflow.com/questions/18650168/convert-blob-to-base64#answer-18650249
+function blobToBase64(blob) {
+    return new Promise((resolve, _) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
+}
+
+viewButton.onclick = (event) => {
+    if(!selected) return;
+    
+    fetch('http://localhost:8081/documents/download?id=' + selected.dataset.paperlessId)
+        .then(response => response.blob())
+        .then(async blob => {
+            blobToBase64(blob).then(data => {
+                preview.src = data;
+                previewContainer.style.display = "block";
+            });
+        });
+};
+
+closePreviewButton.onclick = (event) => {
+    preview.src = "";
+    previewContainer.style.display = "none";
 };
 
 downloadButton.onclick = (event) => {
@@ -161,4 +216,5 @@ downloadButton.onclick = (event) => {
         });
 }
 
+updateButtons();
 fetchDocuments();

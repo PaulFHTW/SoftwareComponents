@@ -93,9 +93,47 @@ public class NMinioClient : INMinioClient
         s.Position = 0;
         return s;
     }
-
+    
     public async Task<Stream?> Download(Document file)
     {
         return await Download(file.Id.ToString());
+    }
+
+    public async Task Delete(Document file)
+    {   
+        try
+        {
+            var beArgs = new BucketExistsArgs()
+                .WithBucket(BucketName);
+            var found = await _minioClient.BucketExistsAsync(beArgs);
+            if (!found)
+            {
+                var mbArgs = new MakeBucketArgs()
+                    .WithBucket(BucketName);
+                await _minioClient.MakeBucketAsync(mbArgs);
+            }
+
+            Console.WriteLine("Checking for existence of " + file.Id + ".pdf");
+            
+            var statObjectArgs = new StatObjectArgs()
+                .WithBucket(BucketName)
+                .WithObject(file.Id + ".pdf");
+        
+            var stat = await _minioClient.StatObjectAsync(statObjectArgs);
+            if(stat == null)
+            {
+                Console.WriteLine("File not found");
+            }
+
+            var removeObjectArgs = new RemoveObjectArgs()
+                .WithBucket(BucketName)
+                .WithObject(file.Id + ".pdf");
+            await _minioClient.RemoveObjectAsync(removeObjectArgs);
+            Console.WriteLine("Successfully deleted " + file.Id);
+        }
+        catch (MinioException e)
+        {
+            Console.WriteLine("File Delete Error: {0}", e.Message);
+        }
     }
 }

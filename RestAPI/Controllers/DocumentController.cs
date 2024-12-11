@@ -74,16 +74,19 @@ public class DocumentController : ControllerBase
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] int id)
     {
+        var document = await _documentManager.GetAsyncById(id);
+        await _minioClient.Delete(document);
+        await _searchIndex.RemoveDocumentAsync(document);
         return await _documentManager.DeleteAsync(id);
     }
     
     [HttpPut]
     public async Task<IActionResult> Update([FromQuery] int id, [FromBody] DocumentUpdateDTO updateDto)
     {
-        _logger.Debug("UPDATE TRIGGERED FOR ID " + id);
         var document = await _documentManager.GetAsyncById(id);
         document.Title = updateDto.Title!;
         
+        await _searchIndex.UpdateDocumentAsync(document);
         return await _documentManager.PutAsync(id, document);
     }
     
