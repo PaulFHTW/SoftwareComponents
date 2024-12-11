@@ -5,7 +5,6 @@ using ElasticSearch;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Mappings;
-using MessageQueue;
 using ILogger = Logging.ILogger;
 using Logging;
 using NMinio;
@@ -18,9 +17,6 @@ builder.Services.AddScoped<ILogger, Logger>();
 builder.Services.AddScoped<IRabbitClient>(sp => ActivatorUtilities.CreateInstance<RabbitFactory>(sp, builder.Configuration, sp.GetRequiredService<ILogger>()).Create("RestAPI"));
 builder.Services.AddScoped<INMinioClient>(sp => ActivatorUtilities.CreateInstance<MinioFactory>(sp, builder.Configuration, sp.GetRequiredService<ILogger>()).Create());
 builder.Services.AddScoped<ISearchIndex, SearchIndex>();
-
-//FileUpload _minioUpload = new FileUpload();
-//_minioUpload.Upload();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,7 +33,6 @@ builder.Services.AddLogging(loggingBuilder =>
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddFluentValidationAutoValidation();
-//builder.Services.AddValidatorsFromAssemblyContaining<TodoItemDtoValidator>();
 
 builder.Services.AddCors(options =>
 {
@@ -51,17 +46,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-/*
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-    c.IncludeXmlComments(xmlPath);
-});
-*/
-
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -71,40 +55,27 @@ using (var scope = app.Services.CreateScope())
     
     try
     {
-        Console.WriteLine("Versuche, eine Verbindung zur Datenbank herzustellen...");
+        logger.Info("Trying to establish connection to the database...");
 
         while (!context.Database.CanConnect())
         {
-            Console.WriteLine("Datenbank ist noch nicht bereit, warte...");
+            logger.Info("Database not reachable. Retrying in 1 second...");
             Thread.Sleep(1000);
         }
 
-        Console.WriteLine("Verbindung zur Datenbank erfolgreich.");
+        logger.Info("Connection to the database established.");
 
         context.Database.EnsureCreated();
-        Console.WriteLine("Datenbankmigrationen erfolgreich angewendet.");
+        logger.Info("Database migration applied successfully.");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Fehler bei der Anwendung der Migrationen: {ex.Message}");
+        logger.Error($"Error applying database migrations: {ex.Message}");
     }
 }
 
-// Configure the HTTP request pipeline.
-/*
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-        c.RoutePrefix = "swagger"; 
-    });
-}
-*/
 
 app.UseCors("AllowWebUI");
-//app.Urls.Add("http://*:8081");
 app.UseAuthorization();
 
 app.MapControllers();

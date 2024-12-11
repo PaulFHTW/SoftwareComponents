@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ILogger, Logger>();
 builder.Services.AddScoped<INMinioClient>(sp => ActivatorUtilities.CreateInstance<MinioFactory>(sp, builder.Configuration, sp.GetRequiredService<ILogger>()).Create());
 builder.Services.AddScoped<ISearchIndex, SearchIndex>();
+builder.Services.AddScoped<IOcrClient, OcrClient>();
 builder.Services.AddScoped<IRabbitClient>(sp => ActivatorUtilities.CreateInstance<RabbitFactory>(sp, builder.Configuration, sp.GetRequiredService<ILogger>()).Create("OcrWorker"));
 
 builder.Services.AddScoped<IWorker, Worker>();
@@ -18,10 +19,11 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
+    ILogger? logger = null;
     try
     {
         var services = scope.ServiceProvider;
-        var logger = services.GetRequiredService<ILogger>();
+        logger = services.GetRequiredService<ILogger>();
         
         logger.Info("Starting worker...");
         using var worker = services.GetRequiredService<IWorker>();
@@ -32,6 +34,6 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception e)
     {
-        Console.WriteLine("Error during service resolution: " + e.Message);
+        logger?.Info("Error during service resolution: " + e.Message);
     }
 }

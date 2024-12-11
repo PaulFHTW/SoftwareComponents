@@ -81,7 +81,7 @@ public class RabbitClient : IRabbitClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error processing message: {ex.Message}");
+                _logger.Error($"Error processing message: {ex.Message}");
             }
             finally
             {

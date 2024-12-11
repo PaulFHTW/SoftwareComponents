@@ -13,13 +13,15 @@ public class Worker : IWorker
 {
     private readonly IRabbitClient _rabbitClient;
     private readonly INMinioClient _minioClient;
+    private readonly IOcrClient _ocrClient;
     private readonly ISearchIndex _searchIndex;
     private readonly ILogger _logger;
     
-    public Worker(IRabbitClient rabbitClient, INMinioClient minioClient, ISearchIndex searchIndex, ILogger logger)
+    public Worker(IRabbitClient rabbitClient, INMinioClient minioClient, IOcrClient ocrClient, ISearchIndex searchIndex, ILogger logger)
     {
         _rabbitClient = rabbitClient;
         _minioClient = minioClient;
+        _ocrClient = ocrClient;
         _searchIndex = searchIndex;
         _logger = logger;
     }
@@ -53,8 +55,7 @@ public class Worker : IWorker
         }
     
         _logger.Info("Received stream...");
-        var ocrClient = new OcrClient(new OcrOptions());
-        var ocrContentText = ocrClient.OcrPdf(stream);
+        var ocrContentText = _ocrClient.OcrPdf(stream);
         _logger.Info("OCR completed!");
     
         // Add document to kibana

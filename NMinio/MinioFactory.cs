@@ -4,7 +4,7 @@ using ILogger = Logging.ILogger;
 
 namespace NMinio;
 
-public class MinioFactory : IMinioFactory
+public class MinioFactory
 {
     private readonly string _endpoint;
     private readonly string _accessKey;

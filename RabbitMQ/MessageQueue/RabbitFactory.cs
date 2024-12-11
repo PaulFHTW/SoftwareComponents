@@ -14,9 +14,9 @@ public class RabbitFactory(IConfiguration configuration, ILogger logger)
             ClientProvidedName = name
         };
 	    
-        var exchangeName = configuration["RabbitMQ:ExchangeName"]; 
-        var queueName = configuration["RabbitMQ:QueueName"];
-        var routingKey = configuration["RabbitMQ:RoutingKey"];
+        var exchangeName = configuration["RabbitMQ:ExchangeName"] ?? "NPaperless"; 
+        var queueName = configuration["RabbitMQ:QueueName"] ?? "NPaperlessQueue";
+        var routingKey = configuration["RabbitMQ:RoutingKey"] ?? "NPaperless-Routing-Key";
 	    
         IConnection? conn = null;
         IModel? channel = null;
