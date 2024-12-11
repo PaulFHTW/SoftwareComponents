@@ -2,17 +2,45 @@ using DAL.Entities;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
+using ILogger = Logging.ILogger;
 
 namespace NMinio;
 
 public class NMinioClient : INMinioClient
 {
     private readonly IMinioClient _minioClient;
-    private readonly string BucketName = "test";
+    private readonly string _bucketName;
+    private readonly ILogger _logger;
     
-    public NMinioClient(IMinioClient minioClient)
+    public NMinioClient(IMinioClient minioClient, string bucketName, ILogger logger)
     {
         _minioClient = minioClient;
+        _bucketName = bucketName;
+        _logger = logger;
+
+        // Create bucket if it doesn't exist
+        InitializeBuckets();
+    }
+
+    private async void InitializeBuckets()
+    {
+        try
+        {
+            var beArgs = new BucketExistsArgs()
+                .WithBucket(_bucketName);
+            var found = await _minioClient.BucketExistsAsync(beArgs);
+            if (!found)
+            {
+                _logger.Info("Bucket not found. Creating bucket...");
+                var mbArgs = new MakeBucketArgs()
+                    .WithBucket(_bucketName);
+                await _minioClient.MakeBucketAsync(mbArgs);
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.Error("Error creating bucket: " + e.Message);
+        }
     }
     
     public async Task Upload(Document file, IFormFile pdfFile)
@@ -21,29 +49,19 @@ public class NMinioClient : INMinioClient
         {
             try
             {
-                // Make a bucket on the server, if not already present.
-                var beArgs = new BucketExistsArgs()
-                    .WithBucket(BucketName);
-                bool found = await _minioClient.BucketExistsAsync(beArgs);
-                if (!found)
-                {
-                    var mbArgs = new MakeBucketArgs()
-                        .WithBucket(BucketName);
-                    await _minioClient.MakeBucketAsync(mbArgs);
-                }
                 // Upload a file to bucket.
                 var putObjectArgs = new PutObjectArgs()
-                    .WithBucket(BucketName)
+                    .WithBucket(_bucketName)
                     .WithObject(file.Id + ".pdf")
                     .WithStreamData(stream)
                     .WithObjectSize(pdfFile.Length)
                     .WithContentType("application/pdf");
                 await _minioClient.PutObjectAsync(putObjectArgs);
-                Console.WriteLine("Successfully uploaded " + file.Id);
+                _logger.Info("Successfully uploaded " + file.Id);
             }
             catch (MinioException e)
             {
-                Console.WriteLine("File Upload Error: {0}", e.Message);
+                _logger.Error($"File Upload Error: {e.Message}");
             }      
         }
     }
@@ -53,40 +71,29 @@ public class NMinioClient : INMinioClient
         Stream s = new MemoryStream();
         try
         {
-            var beArgs = new BucketExistsArgs()
-                .WithBucket(BucketName);
-            var found = await _minioClient.BucketExistsAsync(beArgs);
-            if (!found)
-            {
-                var mbArgs = new MakeBucketArgs()
-                    .WithBucket(BucketName);
-                await _minioClient.MakeBucketAsync(mbArgs);
-            }
-
-            Console.WriteLine("Checking for existence of " + filename + ".pdf");
-            
+            _logger.Info("Checking for existence of " + filename + ".pdf");
             var statObjectArgs = new StatObjectArgs()
-                .WithBucket(BucketName)
+                .WithBucket(_bucketName)
                 .WithObject(filename + ".pdf");
         
             var stat = await _minioClient.StatObjectAsync(statObjectArgs);
             if(stat == null)
             {
-                Console.WriteLine("File not found");
+                _logger.Error("File not found");
                 return null;
             }
 
-            Console.WriteLine("Downloading " + filename + ".pdf");
+            _logger.Info("Downloading " + filename + ".pdf");
             var getObjectArgs = new GetObjectArgs()
-                .WithBucket(BucketName)
+                .WithBucket(_bucketName)
                 .WithObject(filename + ".pdf")
                 .WithCallbackStream((stream) => { stream.CopyTo(s); });
             await _minioClient.GetObjectAsync(getObjectArgs);
-            Console.WriteLine("Successfully downloaded " + filename);
+            _logger.Info("Successfully downloaded " + filename);
         }
         catch (MinioException e)
         {
-            Console.WriteLine("File Download Error: {0}", e.Message);
+            _logger.Error($"File Download Error: {e.Message}");
             return null;
         }
 
@@ -103,37 +110,27 @@ public class NMinioClient : INMinioClient
     {   
         try
         {
-            var beArgs = new BucketExistsArgs()
-                .WithBucket(BucketName);
-            var found = await _minioClient.BucketExistsAsync(beArgs);
-            if (!found)
-            {
-                var mbArgs = new MakeBucketArgs()
-                    .WithBucket(BucketName);
-                await _minioClient.MakeBucketAsync(mbArgs);
-            }
-
-            Console.WriteLine("Checking for existence of " + file.Id + ".pdf");
-            
+            _logger.Info("Checking for existence of " + file.Id + ".pdf");
             var statObjectArgs = new StatObjectArgs()
-                .WithBucket(BucketName)
+                .WithBucket(_bucketName)
                 .WithObject(file.Id + ".pdf");
         
             var stat = await _minioClient.StatObjectAsync(statObjectArgs);
             if(stat == null)
             {
-                Console.WriteLine("File not found");
+                _logger.Error("File not found");
+                return;
             }
 
             var removeObjectArgs = new RemoveObjectArgs()
-                .WithBucket(BucketName)
+                .WithBucket(_bucketName)
                 .WithObject(file.Id + ".pdf");
             await _minioClient.RemoveObjectAsync(removeObjectArgs);
-            Console.WriteLine("Successfully deleted " + file.Id);
+            _logger.Info("Successfully deleted " + file.Id);
         }
         catch (MinioException e)
         {
-            Console.WriteLine("File Delete Error: {0}", e.Message);
+            _logger.Error($"File Delete Error: {e.Message}");
         }
     }
 }

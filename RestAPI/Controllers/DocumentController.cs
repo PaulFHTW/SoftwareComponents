@@ -14,6 +14,7 @@ using Minio;
 using Minio.DataModel.Args;
 using Minio.Exceptions;
 using NMinio;
+using RabbitMQ;
 using ILogger = Logging.ILogger;
 
 namespace RestAPI.Controllers;
@@ -23,18 +24,17 @@ namespace RestAPI.Controllers;
 public class DocumentController : ControllerBase
 {    
     private readonly IDocumentManager _documentManager;
-    private readonly IRabbitSender _rabbitSender;
+    private readonly IRabbitClient _rabbitClient;
     private readonly ISearchIndex _searchIndex;
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
     private readonly DocumentValidator _validator;
     private readonly INMinioClient _minioClient;
-    private readonly string BucketName = "test";
 
-    public DocumentController(IDocumentManager documentManager, IRabbitSender rabbitSender, INMinioClient minioClient, ISearchIndex searchIndex, IMapper mapper, ILogger logger)
+    public DocumentController(IDocumentManager documentManager, IRabbitClient rabbitClient, INMinioClient minioClient, ISearchIndex searchIndex, IMapper mapper, ILogger logger)
     {
         _documentManager = documentManager;
-        _rabbitSender = rabbitSender;
+        _rabbitClient = rabbitClient;
         _searchIndex = searchIndex;
         _mapper = mapper;
         _logger = logger;
@@ -45,11 +45,11 @@ public class DocumentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Upload([FromForm] DocumentDTO dtoFile)
     {
-        _logger.Debug("UPLOADING FILE.....");
+        if (dtoFile.File == null) return BadRequest("File is required.");
+        
         var file = _mapper.Map<Document>(dtoFile);
         var validation = await _validator.ValidateAsync(file);
-        
-        var pdfFile = dtoFile.File!;
+        var pdfFile = dtoFile.File;
         
         if(!validation.IsValid)
         {
@@ -61,7 +61,7 @@ public class DocumentController : ControllerBase
         var res = await _documentManager.PostAsync(file);
         if(res is not OkObjectResult ok) return res;
         
-        _rabbitSender.SendMessage(JsonSerializer.Serialize(new DocumentUploadedMessage( (int) (ok.Value ?? 0), file.Title, "Document was uploaded successfully!" )));
+        _rabbitClient.SendMessage(JsonSerializer.Serialize(new DocumentUploadedMessage( (int) (ok.Value ?? 0), file.Title, file.UploadDate, "Document was uploaded successfully!" )));
         return res;
     }
     
