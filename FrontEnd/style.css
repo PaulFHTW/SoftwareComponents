@@ -151,7 +151,11 @@ h3 {
 }
 
 #refresh {
-    background-color: #45a52f;
+    background-color: #8455cd;
+}
+
+#view {
+    background-color: #5cb85c;
 }
 
 button:hover {

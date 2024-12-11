@@ -84,7 +84,6 @@ updateButton.onclick = (event) => {
 }
 
 const updateDocument = (id, newName) => {
-
     const updateObj = {
         "Title": newName
     };
@@ -110,18 +109,29 @@ const deleteDocument = (id) => {
     }).then(_ => fetchDocuments());
 };
 
+const addDataToList = (data) => {
+    data.sort((a, b) => a.uploadDate < b.uploadDate ? 1 : -1);
+    data.forEach(doc => {
+        const li = document.createElement('li');
+        li.tabIndex = 1;
+        li.textContent = doc.title;
+        li.dataset.paperlessId = doc.id;
+        list.appendChild(li);
+    });
+}
+
 const fetchDocuments = () => {
     list.innerHTML = '';
     fetch('http://localhost:8081/documents')
     .then(response => response.json())
     .then(data => {
-        data.forEach(doc => {
-            const li = document.createElement('li');
-            li.tabIndex = 1;
-            li.textContent = doc.title;
-            li.dataset.paperlessId = doc.id;
+        addDataToList(data);
+        
+        if(list.children.length === 0) {
+            let li = document.createElement('li');
+            li.textContent = "No documents found";
             list.appendChild(li);
-        });
+        }
     });
 }
 
@@ -133,15 +143,7 @@ const searchDocuments = (query) => {
     updateButtons();
     fetch('http://localhost:8081/documents/search?q=' + query)
         .then(response => response.json())
-        .then(data => {
-            data.forEach(doc => {
-                const li = document.createElement('li');
-                li.tabIndex = 1;
-                li.textContent = doc.title;
-                li.dataset.paperlessId = doc.id;
-                list.appendChild(li);
-            });
-        });
+        .then(data => addDataToList(data));
 }
 
 searchForm.onsubmit = (event) => {
@@ -169,7 +171,7 @@ openButton.onclick = (event) => {
     
     fetch('http://localhost:8081/documents/download?id=' + selected.dataset.paperlessId)
         .then(response => response.blob())
-        .then( blob => {
+        .then(blob => {
             let file = window.URL.createObjectURL(blob);
             window.open(file);
         });
@@ -207,7 +209,7 @@ downloadButton.onclick = (event) => {
     
     fetch('http://localhost:8081/documents/download?id=' + selected.dataset.paperlessId)
         .then(response => response.blob())
-        .then( blob => {
+        .then(blob => {
             let url = window.URL.createObjectURL(blob);
             let a = document.createElement('a');
             a.href = url;
