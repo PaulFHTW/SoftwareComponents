@@ -63,6 +63,7 @@ services:
   ocrworker:
     init: true
     tty: true
+    restart: always
     build:
       context: .
       dockerfile: ./OcrWorker/Dockerfile

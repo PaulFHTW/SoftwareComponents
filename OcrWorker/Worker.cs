@@ -61,12 +61,13 @@ public class Worker : IWorker
         // Add document to kibana
         var document = new Document(id, title, ocrContentText, uploadDate);
         await _searchIndex.AddDocumentAsync(document);
+        _rabbitClient.SendMessage(RabbitQueueType.OcrResponseQueue, JsonSerializer.Serialize(new DocumentScannedMessage(id, title, true, "Document was scanned successfully!")));
         _logger.Info("Document added to elastic search!");
     }
 
     public void Start()
     {
-        _rabbitClient.RegisterConsumer(Consumer);
+        _rabbitClient.RegisterConsumer(RabbitQueueType.OcrRequestQueue, Consumer);
     }
 
     public void Stop()

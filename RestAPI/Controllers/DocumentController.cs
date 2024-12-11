@@ -61,7 +61,7 @@ public class DocumentController : ControllerBase
         var res = await _documentManager.PostAsync(file);
         if(res is not OkObjectResult ok) return res;
         
-        _rabbitClient.SendMessage(JsonSerializer.Serialize(new DocumentUploadedMessage( (int) (ok.Value ?? 0), file.Title, file.UploadDate, "Document was uploaded successfully!" )));
+        _rabbitClient.SendMessage(RabbitQueueType.OcrRequestQueue, JsonSerializer.Serialize(new DocumentUploadedMessage( (int) (ok.Value ?? 0), file.Title, file.UploadDate, "Document was uploaded successfully!" )));
         return res;
     }
     

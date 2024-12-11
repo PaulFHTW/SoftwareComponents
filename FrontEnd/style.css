@@ -177,3 +177,7 @@ button:hover {
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.incomplete {
+    background-color: #dc3545 !important;
+}

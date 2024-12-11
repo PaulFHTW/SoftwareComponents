@@ -18,6 +18,15 @@ const preview = document.getElementById("preview");
 const closePreviewButton = document.getElementById("closePreview");
 
 let selected = null;
+const pending = [];
+
+window.onkeyup = (event) => {
+    if(event.key === 'Delete' && selected) {
+        deleteDocument(selected.dataset.paperlessId);
+        selected = null;
+        updateButtons();
+    }
+}
 
 document.querySelector('ul').addEventListener('click', function(e) {
     if(e.target.tagName == 'LI') {
@@ -46,10 +55,12 @@ form.onsubmit = async (event) => {
         const formData = new FormData(form);
         formData.append('file', f);
 
-        await fetch('http://localhost:8081/documents', {
+        const response = await fetch('http://localhost:8081/documents', {
             method: 'POST',
             body: formData
         });
+        const id = await response.text();
+        pending.push(parseInt(id));
     }
     
     fetchDocuments();
@@ -117,6 +128,10 @@ const addDataToList = (data) => {
         li.tabIndex = 1;
         li.textContent = doc.title;
         li.dataset.paperlessId = doc.id;
+        if(pending.includes(doc.id) || !doc.content || doc.content === "") {
+            li.classList.add('incomplete');
+            li.textContent += " | OCR in progress";
+        }
         list.appendChild(li);
     });
 }
@@ -221,3 +236,28 @@ downloadButton.onclick = (event) => {
 
 updateButtons();
 fetchDocuments();
+
+const ws = new WebSocket('ws://localhost:8081/status');
+
+const keepalive = () => {
+    ws.send('ping');
+    setTimeout(keepalive, 30000);
+}
+
+ws.onmessage = (event) => {
+    console.log(event.data);
+    
+    try {
+        const data = JSON.parse(event.data);
+        if(data.id === undefined) return;
+
+        pending.splice(pending.indexOf(parseInt(data.id)), 1);
+        fetchDocuments();
+    } catch(_){}
+}
+
+ws.onopen = () => {
+    console.log('Connected to server');
+    ws.send("Hello, server!");
+    keepalive();
+}

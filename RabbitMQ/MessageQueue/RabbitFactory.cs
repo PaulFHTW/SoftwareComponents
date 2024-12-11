@@ -14,8 +14,6 @@ public class RabbitFactory(IConfiguration configuration, ILogger logger)
             ClientProvidedName = name
         };
 	    
-        var exchangeName = configuration["RabbitMQ:ExchangeName"] ?? "NPaperless"; 
-        var queueName = configuration["RabbitMQ:QueueName"] ?? "NPaperlessQueue";
         var routingKey = configuration["RabbitMQ:RoutingKey"] ?? "NPaperless-Routing-Key";
 	    
         IConnection? conn = null;
@@ -26,9 +24,12 @@ public class RabbitFactory(IConfiguration configuration, ILogger logger)
                 conn = factory.CreateConnection();
                 channel = conn.CreateModel();
                 
-                channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
-                channel.QueueDeclare(queue: queueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-                channel.QueueBind(queueName, exchangeName, routingKey, arguments: null);
+                RabbitQueueType.All.ForEach(rabbitQueue =>
+                {
+                    channel.ExchangeDeclare(rabbitQueue.ExchangeName, ExchangeType.Direct);
+                    channel.QueueDeclare(queue: rabbitQueue.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+                    channel.QueueBind(rabbitQueue.QueueName, rabbitQueue.ExchangeName, routingKey, arguments: null);
+                });
                 channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
                 break;
             }
@@ -40,6 +41,6 @@ public class RabbitFactory(IConfiguration configuration, ILogger logger)
             }
         }
         
-        return new RabbitClient(conn, channel, exchangeName, queueName, routingKey, logger);
+        return new RabbitClient(conn, channel, routingKey, logger);
     }
 }

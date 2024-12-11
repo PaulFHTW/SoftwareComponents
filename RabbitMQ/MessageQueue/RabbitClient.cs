@@ -9,20 +9,16 @@ public class RabbitClient : IRabbitClient
 {
     private readonly IConnection _connection;
     private readonly IModel _channel;
-    private readonly string _exchangeName;
-    private readonly string _queueName;
     private readonly string _routingKey;
     private readonly ILogger _logger;
 
     private readonly SemaphoreSlim _semaphoreSlim;
     private string _consumerTag;
     
-    public RabbitClient(IConnection connection, IModel channel, string exchangeName, string queueName, string routingKey, ILogger logger)
+    public RabbitClient(IConnection connection, IModel channel, string routingKey, ILogger logger)
     {
         _connection = connection;
         _channel = channel;
-        _exchangeName = exchangeName;
-        _queueName = queueName;
         _routingKey = routingKey;
         _logger = logger;
         
@@ -39,30 +35,14 @@ public class RabbitClient : IRabbitClient
         _connection.Dispose();
     }
 
-    public void SendMessage(string message)
+    public void SendMessage(RabbitQueue queue, string message)
     {
         var messageBodyBytes = Encoding.UTF8.GetBytes(message);
-        _channel.BasicPublish(exchange: _exchangeName, routingKey: _routingKey, basicProperties: null, body: messageBodyBytes);
+        _channel.BasicPublish(exchange: queue.ExchangeName, routingKey: _routingKey, basicProperties: null, body: messageBodyBytes);
         _logger.Info($"Message Sent: {message}");
     }
 
-    public void ReceiveMessage()
-    {
-        var consumer = new EventingBasicConsumer(_channel);
-
-        consumer.Received += (_, args) => {
-            var body = args.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
-
-            _logger.Info($"Message Received: {message}");
-            _channel.BasicAck(args.DeliveryTag, multiple: false);
-        };
-
-        var consumerTag = _channel.BasicConsume(_queueName, autoAck: false, consumer);
-        _channel.BasicCancel(consumerTag);
-    }
-
-    public void RegisterConsumer(Func<string, Task<string>> messageHandler)
+    public void RegisterConsumer(RabbitQueue queue, Func<string, Task<string>> messageHandler)
     {
         var consumer = new EventingBasicConsumer(_channel);
         
@@ -90,7 +70,7 @@ public class RabbitClient : IRabbitClient
             }
         };
 
-        _consumerTag = _channel.BasicConsume(_queueName, autoAck: false, consumer);
+        _consumerTag = _channel.BasicConsume(queue.QueueName, autoAck: false, consumer);
         _logger.Info($"Consumer registered with tag {_consumerTag}");
     }
 

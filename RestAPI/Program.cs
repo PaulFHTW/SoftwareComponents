@@ -9,6 +9,7 @@ using ILogger = Logging.ILogger;
 using Logging;
 using NMinio;
 using RabbitMQ;
+using RestAPI.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ILogger, Logger>();
@@ -24,6 +25,9 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DocumentContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IDocumentManager, DocumentManager>(); 
+
+builder.Services.AddSingleton<DocumentEventHandler>();
+builder.Services.AddSingleton<RabbitStatusUpdateHandler>();
 
 builder.Services.AddLogging(loggingBuilder =>
 {
@@ -53,6 +57,9 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<DocumentContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
     
+    var eventHandler = scope.ServiceProvider.GetRequiredService<DocumentEventHandler>();
+    var rabbitHandler = scope.ServiceProvider.GetRequiredService<RabbitStatusUpdateHandler>();
+    
     try
     {
         logger.Info("Trying to establish connection to the database...");
@@ -73,6 +80,13 @@ using (var scope = app.Services.CreateScope())
         logger.Error($"Error applying database migrations: {ex.Message}");
     }
 }
+
+var webSocketOptions = new WebSocketOptions
+{
+    KeepAliveInterval = TimeSpan.FromMinutes(2)
+};
+webSocketOptions.AllowedOrigins.Add("http://localhost");
+app.UseWebSockets(webSocketOptions);
 
 
 app.UseCors("AllowWebUI");
