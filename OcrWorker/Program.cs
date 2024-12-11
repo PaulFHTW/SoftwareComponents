@@ -1,59 +1,40 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.Text.Json;
-using NPaperless.OCRLibrary;
-using MessageQueue;
-using MessageQueue.Messages;
-using DAL.Entities;
+﻿using MessageQueue;
 using ElasticSearch;
 using NMinio;
+using Logging;
+using NPaperless.OCRLibrary;
+using ILogger = Logging.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ILogger, Logger>();
+builder.Services.AddScoped<INMinioClient>(sp => ActivatorUtilities.CreateInstance<MinioFactory>(sp, builder.Configuration, sp.GetRequiredService<ILogger>()).Create());
+builder.Services.AddScoped<ISearchIndex, SearchIndex>();
 
-var minioClient = new MinioFactory(builder.Configuration).Create();
+Console.WriteLine("Initializing RabbitMQ...");
+RabbitInitalizer.RabbitInit();
+builder.Services.AddScoped<IRabbitConsumer, RabbitConsumer>();
 
-var rabbitConsumer = new RabbitConsumer();
-await rabbitConsumer.RegisterConsumer(Consumer);
+builder.Services.AddScoped<IWorker, Worker>();
 
-Console.WriteLine("OCR consumer registered.");
+var app = builder.Build();
 
-while (true);
-return;
-
-string Consumer(string message)
+using (var scope = app.Services.CreateScope())
 {
     try
     {
-        Console.WriteLine($"Message Received: {message}");
-        var documentTitle = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.DocumentTitle;
-        var documentId = JsonSerializer.Deserialize<DocumentUploadedMessage>(message)!.DocumentId;
-        Console.WriteLine($"Performing OCR for document {documentTitle}");
-        PerformOcr(documentId, documentTitle);
+        var services = scope.ServiceProvider;
+        var logger = services.GetRequiredService<ILogger>();
+        
+        logger.Info("Starting worker...");
+        var worker = services.GetRequiredService<IWorker>();
+        worker.Start();
+        logger.Info("Worker started!");
     }
-    catch (Exception _)
+    catch (Exception e)
     {
-        // ignored
+        Console.WriteLine("Error during service resolution: " + e.Message);
     }
-
-    return message;
 }
 
-async Task PerformOcr(int id, string title)
-{
-    var stream = await minioClient.Download(id.ToString());
-
-    if (stream == null)
-    {
-        Console.WriteLine("File not found");
-        return;
-    }
-    
-    Console.WriteLine("Received stream...");
-    var ocrClient = new OcrClient(new OcrOptions());
-    var ocrContentText = ocrClient.OcrPdf(stream);
-    Console.WriteLine(ocrContentText);
-    
-    // Add document to kibana
-    Document document = new Document(id, title, ocrContentText, DateTime.Now);
-    var ElasticSearchIndex = new SearchIndex();
-    ElasticSearchIndex.AddDocumentAsync(document);
-}
+while (true);
+return;

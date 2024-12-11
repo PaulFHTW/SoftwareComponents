@@ -7,18 +7,16 @@ using Microsoft.EntityFrameworkCore;
 using RestAPI.Mappings;
 using MessageQueue;
 using ILogger = Logging.ILogger;
-using Minio;
 using Logging;
 using NMinio;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ILogger, Logger>();
 
 // Add services to the container.
-RabbitInitalizer _rabbitMQ = new RabbitInitalizer();
-_rabbitMQ.RabbitInit();
-builder.Services.AddSingleton<IRabbitInitalizer>(_rabbitMQ);
+RabbitInitalizer.RabbitInit();
 builder.Services.AddScoped<IRabbitSender, RabbitSender>();
-builder.Services.AddScoped<INMinioClient>(_ => new MinioFactory(builder.Configuration).Create());
+builder.Services.AddScoped<INMinioClient>(sp => ActivatorUtilities.CreateInstance<MinioFactory>(sp, builder.Configuration, sp.GetRequiredService<ILogger>()).Create());
 builder.Services.AddScoped<ISearchIndex, SearchIndex>();
 
 //FileUpload _minioUpload = new FileUpload();
@@ -30,7 +28,6 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<DocumentContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IDocumentManager, DocumentManager>(); 
-builder.Services.AddScoped<ILogger, Logger>();
 
 builder.Services.AddLogging(loggingBuilder =>
 {

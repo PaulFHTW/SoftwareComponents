@@ -29,7 +29,6 @@ public class DocumentController : ControllerBase
     private readonly ILogger _logger;
     private readonly DocumentValidator _validator;
     private readonly INMinioClient _minioClient;
-    private readonly string BucketName = "test";
 
     public DocumentController(IDocumentManager documentManager, IRabbitSender rabbitSender, INMinioClient minioClient, ISearchIndex searchIndex, IMapper mapper, ILogger logger)
     {
@@ -45,11 +44,11 @@ public class DocumentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Upload([FromForm] DocumentDTO dtoFile)
     {
-        _logger.Debug("UPLOADING FILE.....");
+        if (dtoFile.File == null) return BadRequest("File is required.");
+        
         var file = _mapper.Map<Document>(dtoFile);
         var validation = await _validator.ValidateAsync(file);
-        
-        var pdfFile = dtoFile.File!;
+        var pdfFile = dtoFile.File;
         
         if(!validation.IsValid)
         {

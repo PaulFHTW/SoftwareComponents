@@ -5,7 +5,7 @@ using RabbitMQ.Client;
 namespace MessageQueue;
 
 public class RabbitInitalizer : IRabbitInitalizer{
-    public void RabbitInit(){
+    public static void RabbitInit(){
 	IConnection? conn = null;
 	RabbitMQ.Client.IModel? channel = null;
 		while(true) {
