@@ -1,6 +1,6 @@
 using DAL.Entities;
 
-namespace ElasticSearch;
+namespace BLL.Search;
 
 public interface ISearchIndex
 {

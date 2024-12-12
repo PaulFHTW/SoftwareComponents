@@ -1,6 +1,6 @@
 using System.Text.Json;
+using BLL.Search;
 using DAL.Entities;
-using ElasticSearch;
 using MessageQueue;
 using MessageQueue.Messages;
 using NMinio;
@@ -77,6 +77,8 @@ public class Worker : IWorker
 
     public void Dispose()
     {
+        _logger.Info("Running cleanup...");
         _rabbitClient.Dispose();
+        _ocrClient.Dispose();
     }
 }

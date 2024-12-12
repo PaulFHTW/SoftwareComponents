@@ -12,6 +12,7 @@ public class OcrClient : IOcrClient
     private readonly string _language;
     
     private readonly ILogger _logger;
+    private readonly TesseractEngine _tesseractEngine;
  
     public OcrClient(IConfiguration configuration, ILogger logger)
     {
@@ -19,6 +20,8 @@ public class OcrClient : IOcrClient
         _language = configuration["OcrOptions:Language"] ?? "eng";
         
         _logger = logger;
+        _logger.Info("Starting tesseract engine...");
+        _tesseractEngine = new TesseractEngine(_tessDataPath, _language, EngineMode.Default);
     }
     
     public string OcrPdf(Stream pdfStream)
@@ -49,23 +52,24 @@ public class OcrClient : IOcrClient
             {
                 magickImage.Quality = 100;
                 magickImage.Format = MagickFormat.Png;
-                _logger.Info("Starting tesseract engine...");
                 
                 // Perform OCR
-                using (var tesseractEngine = new TesseractEngine(_tessDataPath, _language, EngineMode.Default))
+                _logger.Info("Performing image processing...");
+                using (var page = _tesseractEngine.Process(Pix.LoadFromMemory(magickImage.ToByteArray())))//byte[] image
                 {
-                    _logger.Info("Performing image processing...");
-                    using (var page = tesseractEngine.Process(Pix.LoadFromMemory(magickImage.ToByteArray())))//byte[] image
-                    {
-                        var extractedText = page.GetText();
-                        stringBuilder.Append(extractedText);
-                    }
-
-                    _logger.Info("Done!");
+                    var extractedText = page.GetText();
+                    stringBuilder.Append(extractedText);
                 }
+
+                _logger.Info("Done!");
             }
         }
 
         return stringBuilder.ToString();
+    }
+
+    public void Dispose()
+    {
+        _tesseractEngine.Dispose();
     }
 }

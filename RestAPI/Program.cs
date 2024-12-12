@@ -1,7 +1,9 @@
-using DAL.Controllers;
+using BLL;
+using BLL.Documents;
+using BLL.Search;
+using BLL.Socket;
 using DAL.Data;
 using DAL.Repositories;
-using ElasticSearch;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using RestAPI.Mappings;
@@ -9,7 +11,7 @@ using ILogger = Logging.ILogger;
 using Logging;
 using NMinio;
 using RabbitMQ;
-using RestAPI.Controllers;
+using WebSocketManager = BLL.Socket.WebSocketManager;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ILogger, Logger>();
@@ -28,6 +30,7 @@ builder.Services.AddScoped<IDocumentManager, DocumentManager>();
 
 builder.Services.AddSingleton<DocumentEventHandler>();
 builder.Services.AddSingleton<RabbitStatusUpdateHandler>();
+builder.Services.AddSingleton<IWebSocketManager, WebSocketManager>();
 
 builder.Services.AddLogging(loggingBuilder =>
 {

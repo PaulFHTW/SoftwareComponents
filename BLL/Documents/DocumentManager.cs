@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using DAL.Entities;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using DAL.Entities;
 using DAL.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using ILogger = Logging.ILogger;
 
-namespace DAL.Controllers
+namespace BLL.Documents
 {
     public class DocumentManager(IDocumentRepository repository, ILogger logger) : ControllerBase, IDocumentManager
     {

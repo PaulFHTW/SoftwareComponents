@@ -1,12 +1,10 @@
 using DAL.Entities;
 using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.Mapping;
-using Elastic.Clients.Elasticsearch.QueryDsl;
 using Logging;
 using Microsoft.Extensions.Configuration;
 using ILogger = Logging.ILogger;
 
-namespace ElasticSearch;
+namespace BLL.Search;
 public class SearchIndex : ISearchIndex
 {
     private readonly Uri _uri;

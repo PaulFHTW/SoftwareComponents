@@ -20,6 +20,66 @@ const closePreviewButton = document.getElementById("closePreview");
 let selected = null;
 const pending = [];
 
+class PaperlessWebSocket {
+    constructor(url) {
+        this.url = url;
+        this.socket = null;
+    }
+
+    keepalive = () => {
+        this.socket.send('ping');
+        setTimeout(this.keepalive, 30000);
+    }
+    
+    isopen = () => {
+        return this.socket != null && this.socket.readyState === WebSocket.OPEN;
+    }
+    
+    open() {
+        if (this.socket && this.socket.readyState !== WebSocket.CLOSED) {
+            console.warn("WebSocket is already open or connecting.");
+            return;
+        }
+
+        this.socket = new WebSocket(this.url);
+
+        this.socket.onmessage = (event) => {
+            console.log(event.data);
+
+            try {
+                const data = JSON.parse(event.data);
+                if(data.id === undefined) return;
+
+                pending.splice(pending.indexOf(parseInt(data.id)), 1);
+                if(pending.length === 0) this.close();
+                fetchDocuments();
+            } catch(_){}
+        }
+
+        this.socket.onopen = () => {
+            console.log('Connected to server');
+            this.socket.send("Hello, server!");
+            this.keepalive();
+        }
+        
+        this.socket.onclose = () => {
+            console.log('Connection closed');
+        }
+        
+        this.socket.onerror = (error) => {
+            console.error('WebSocket Error: ' + error);
+        }
+    }
+
+    close() {
+        if (this.socket) {
+            this.socket.close();
+        }
+    }
+}
+
+const ws = new PaperlessWebSocket('ws://localhost:8081/status');
+
 window.onkeyup = (event) => {
     if(event.key === 'Delete' && selected) {
         deleteDocument(selected.dataset.paperlessId);
@@ -61,6 +121,7 @@ form.onsubmit = async (event) => {
         });
         const id = await response.text();
         pending.push(parseInt(id));
+        ws.open();
     }
     
     fetchDocuments();
@@ -131,6 +192,8 @@ const addDataToList = (data) => {
         if(pending.includes(doc.id) || !doc.content || doc.content === "") {
             li.classList.add('incomplete');
             li.textContent += " | OCR in progress";
+            
+            if(!ws.isopen()) ws.open();
         }
         list.appendChild(li);
     });
@@ -237,27 +300,10 @@ downloadButton.onclick = (event) => {
 updateButtons();
 fetchDocuments();
 
-const ws = new WebSocket('ws://localhost:8081/status');
-
-const keepalive = () => {
-    ws.send('ping');
-    setTimeout(keepalive, 30000);
-}
-
-ws.onmessage = (event) => {
-    console.log(event.data);
-    
-    try {
-        const data = JSON.parse(event.data);
-        if(data.id === undefined) return;
-
-        pending.splice(pending.indexOf(parseInt(data.id)), 1);
-        fetchDocuments();
-    } catch(_){}
-}
-
-ws.onopen = () => {
-    console.log('Connected to server');
-    ws.send("Hello, server!");
-    keepalive();
+window.onbeforeunload = () => {
+    console.log('Closing connection');
+    ws.onclose = () => {
+        console.log('Connection closed');
+    };
+    ws.close();
 }

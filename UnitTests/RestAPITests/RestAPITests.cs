@@ -1,14 +1,15 @@
-using NUnit.Framework;
-using Moq;
-using Microsoft.AspNetCore.Mvc;
-using DAL.Repositories;
 using AutoMapper;
+using BLL;
+using BLL.Documents;
+using DAL.Repositories;
+using Logging;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using NUnit.Framework;
 using RestAPI.DVO;
 using RichardSzalay.MockHttp;
-using Logging;
 
-
-namespace RestAPI.Tests{
+namespace RestAPITests {
 
     [TestFixture]
     public class RestAPIControllerTests : ControllerBase
@@ -19,7 +20,7 @@ namespace RestAPI.Tests{
         private Mock<IDocumentRepository> _documentControllerMock;
         private HttpClient _httpClient;
         private HttpMessageHandler _httpMessageHandler;
-        private DAL.Controllers.DocumentManager _documentManager;
+        private DocumentManager _documentManager;
         private Mock<DocumentValidator> _mockValidator;
 
         [SetUp]
@@ -34,7 +35,7 @@ namespace RestAPI.Tests{
             _httpClient = new HttpClient(_httpMessageHandler);
             _httpClientFactoryMock.Setup(factory => factory.CreateClient(It.IsAny<string>())).Returns(_httpClient);
 
-            _documentManager = new DAL.Controllers.DocumentManager(_documentControllerMock.Object, _logMock.Object);
+            _documentManager = new DocumentManager(_documentControllerMock.Object, _logMock.Object);
         }
 
         [Test]

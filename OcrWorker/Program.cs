@@ -1,5 +1,5 @@
-﻿using MessageQueue;
-using ElasticSearch;
+﻿using BLL.Search;
+using MessageQueue;
 using NMinio;
 using Logging;
 using NPaperless.OCRLibrary;
