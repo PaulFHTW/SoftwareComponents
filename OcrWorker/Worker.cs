@@ -1,7 +1,6 @@
 using System.Text.Json;
 using BLL.Search;
 using DAL.Entities;
-using MessageQueue;
 using MessageQueue.Messages;
 using NMinio;
 using RabbitMQ;

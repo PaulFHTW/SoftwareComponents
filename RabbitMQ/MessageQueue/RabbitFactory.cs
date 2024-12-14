@@ -8,7 +8,7 @@ public class RabbitFactory(IConfiguration configuration, ILogger logger)
 {
     public RabbitClient Create(string name)
     {
-        var factory = new ConnectionFactory()
+        var factory = new ConnectionFactory
         {
             Uri = new Uri(configuration.GetConnectionString("RabbitMQ")),
             ClientProvidedName = name
@@ -19,7 +19,7 @@ public class RabbitFactory(IConfiguration configuration, ILogger logger)
         IConnection? conn = null;
         IModel? channel = null;
 		
-        while(true) {
+        while(true)
             try {
                 conn = factory.CreateConnection();
                 channel = conn.CreateModel();
@@ -27,10 +27,10 @@ public class RabbitFactory(IConfiguration configuration, ILogger logger)
                 RabbitQueueType.All.ForEach(rabbitQueue =>
                 {
                     channel.ExchangeDeclare(rabbitQueue.ExchangeName, ExchangeType.Direct);
-                    channel.QueueDeclare(queue: rabbitQueue.QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
-                    channel.QueueBind(rabbitQueue.QueueName, rabbitQueue.ExchangeName, routingKey, arguments: null);
+                    channel.QueueDeclare(rabbitQueue.QueueName, false, false, false, null);
+                    channel.QueueBind(rabbitQueue.QueueName, rabbitQueue.ExchangeName, routingKey, null);
                 });
-                channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+                channel.BasicQos(0, 1, false);
                 break;
             }
             catch (Exception ex)
@@ -39,8 +39,7 @@ public class RabbitFactory(IConfiguration configuration, ILogger logger)
                 if(channel!.IsOpen) channel.Close();
                 Thread.Sleep(100);
             }
-        }
-        
+
         return new RabbitClient(conn, channel, routingKey, logger);
     }
 }

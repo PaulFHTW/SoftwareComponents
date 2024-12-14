@@ -1,5 +1,4 @@
 using Minio;
-using Logging;
 using ILogger = Logging.ILogger;
 
 namespace NMinio;

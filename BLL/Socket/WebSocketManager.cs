@@ -1,4 +1,5 @@
 using System.Net.WebSockets;
+using System.Text;
 using System.Text.Json;
 using Logging;
 
@@ -12,11 +13,8 @@ public class WebSocketManager(DocumentEventHandler documentEventHandler, ILogger
         var updateHandler = new EventHandler(async void (_, args) => await OnDocumentUpdated(args, webSocket));
         documentEventHandler.DocumentUpdated += updateHandler;
             
-        while(webSocket.State == WebSocketState.Open)
-        {
-            await UpdateStatus(webSocket, cancellationToken.Token);
-        }
-                
+        while(webSocket.State == WebSocketState.Open) await UpdateStatus(webSocket, cancellationToken.Token);
+
         documentEventHandler.DocumentUpdated -= updateHandler;
         await webSocket.CloseAsync(
             webSocket.CloseStatus ?? WebSocketCloseStatus.NormalClosure,
@@ -34,7 +32,7 @@ public class WebSocketManager(DocumentEventHandler documentEventHandler, ILogger
                     
         var message = JsonSerializer.Serialize(new { id = dargs.DocumentId, status = dargs.Status.ToString() });
         await webSocket.SendAsync(
-            new ArraySegment<byte>(System.Text.Encoding.UTF8.GetBytes(message)),
+            new ArraySegment<byte>(Encoding.UTF8.GetBytes(message)),
             WebSocketMessageType.Text,
             true,
             CancellationToken.None);

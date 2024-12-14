@@ -87,7 +87,7 @@ public class NMinioClient : INMinioClient
             var getObjectArgs = new GetObjectArgs()
                 .WithBucket(_bucketName)
                 .WithObject(filename + ".pdf")
-                .WithCallbackStream((stream) => { stream.CopyTo(s); });
+                .WithCallbackStream(stream => { stream.CopyTo(s); });
             await _minioClient.GetObjectAsync(getObjectArgs);
             _logger.Info("Successfully downloaded " + filename);
         }

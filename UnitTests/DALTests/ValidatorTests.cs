@@ -1,53 +1,51 @@
-﻿using NUnit.Framework;
+﻿using DAL.Entities;
 using FluentValidation.TestHelper;
+using NUnit.Framework;
 using RestAPI.DVO;
-using DAL.Entities;
-using System;
 
-namespace DAL.Tests.Validator
+namespace DAL.Tests.Validator;
+
+[TestFixture]
+public class DocumentValidatorTests
 {
-    [TestFixture]
-    public class DocumentValidatorTests
+    private DocumentValidator _validator;
+
+    [SetUp]
+    public void SetUp()
     {
-        private DocumentValidator _validator;
+        _validator = new DocumentValidator();
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _validator = new DocumentValidator();
-        }
+    [Test]
+    public void Validate_ShouldNotHaveError_WhenTitleIsValid()
+    {
+        // Arrange
+        var document = new Document(1, "Valid Title.pdf", "", DateTime.Now);
 
-        [Test]
-        public void Validate_ShouldNotHaveError_WhenTitleIsValid()
-        {
-            // Arrange
-            var document = new Document(1, "Valid Title.pdf", "", DateTime.Now);
+        // Act & Assert
+        var result = _validator.TestValidate(document);
+        result.ShouldNotHaveValidationErrorFor(doc => doc.Title);
+    }
 
-            // Act & Assert
-            var result = _validator.TestValidate(document);
-            result.ShouldNotHaveValidationErrorFor(doc => doc.Title);
-        }
+    [Test]
+    public void Validate_ShouldHaveError_WhenTitleIsNull()
+    {
+        // Arrange
+        var document = new Document(1, null, "", DateTime.Now);
 
-        [Test]
-        public void Validate_ShouldHaveError_WhenTitleIsNull()
-        {
-            // Arrange
-            var document = new Document(1, null, "", DateTime.Now);
+        // Act & Assert
+        var result = _validator.TestValidate(document);
+        result.ShouldHaveValidationErrorFor(doc => doc.Title).WithErrorMessage("Title is required");
+    }
 
-            // Act & Assert
-            var result = _validator.TestValidate(document);
-            result.ShouldHaveValidationErrorFor(doc => doc.Title).WithErrorMessage("Title is required");
-        }
+    [Test]
+    public void Validate_ShouldHaveError_WhenTitleIsTooLong()
+    {
+        // Arrange
+        var document = new Document(1, new string('A', 101),  "", DateTime.Now);
 
-        [Test]
-        public void Validate_ShouldHaveError_WhenTitleIsTooLong()
-        {
-            // Arrange
-            var document = new Document(1, new string('A', 101),  "", DateTime.Now);
-
-            // Act & Assert
-            var result = _validator.TestValidate(document);
-            result.ShouldHaveValidationErrorFor(doc => doc.Title).WithErrorMessage("Title must be between 1 and 100 characters");
-        }
+        // Act & Assert
+        var result = _validator.TestValidate(document);
+        result.ShouldHaveValidationErrorFor(doc => doc.Title).WithErrorMessage("Title must be between 1 and 100 characters");
     }
 }

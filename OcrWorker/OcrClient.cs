@@ -1,6 +1,5 @@
 using System.Text;
 using ImageMagick;
-using Microsoft.Extensions.Options;
 using Tesseract;
 using ILogger = Logging.ILogger;
 

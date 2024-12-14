@@ -1,7 +1,6 @@
 ﻿using BLL.Search;
-using MessageQueue;
-using NMinio;
 using Logging;
+using NMinio;
 using NPaperless.OCRLibrary;
 using RabbitMQ;
 using ILogger = Logging.ILogger;

@@ -38,7 +38,7 @@ public class RabbitClient : IRabbitClient
     public void SendMessage(RabbitQueue queue, string message)
     {
         var messageBodyBytes = Encoding.UTF8.GetBytes(message);
-        _channel.BasicPublish(exchange: queue.ExchangeName, routingKey: _routingKey, basicProperties: null, body: messageBodyBytes);
+        _channel.BasicPublish(queue.ExchangeName, _routingKey, null, messageBodyBytes);
         _logger.Info($"Message Sent: {message}");
     }
 
@@ -65,19 +65,17 @@ public class RabbitClient : IRabbitClient
             }
             finally
             {
-                _channel.BasicAck(args.DeliveryTag, multiple: false);
+                _channel.BasicAck(args.DeliveryTag, false);
                 _semaphoreSlim.Release();
             }
         };
 
-        _consumerTag = _channel.BasicConsume(queue.QueueName, autoAck: false, consumer);
+        _consumerTag = _channel.BasicConsume(queue.QueueName, false, consumer);
         _logger.Info($"Consumer registered with tag {_consumerTag}");
     }
 
     public void CancelConsumer()
     {
-        if(_consumerTag != string.Empty){
-            _channel.BasicCancel(_consumerTag);
-        }
+        if(_consumerTag != string.Empty) _channel.BasicCancel(_consumerTag);
     }
 }

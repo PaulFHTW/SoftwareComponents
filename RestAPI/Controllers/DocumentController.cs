@@ -1,15 +1,14 @@
 using System.Text.Json;
 using AutoMapper;
-using BLL;
 using BLL.Documents;
 using BLL.Search;
 using DAL.Entities;
-using Microsoft.AspNetCore.Mvc;
-using RestAPI.DTO;
-using RestAPI.DVO;
 using MessageQueue.Messages;
+using Microsoft.AspNetCore.Mvc;
 using NMinio;
 using RabbitMQ;
+using RestAPI.DTO;
+using RestAPI.DVO;
 using ILogger = Logging.ILogger;
 
 namespace RestAPI.Controllers;
@@ -46,10 +45,7 @@ public class DocumentController : ControllerBase
         var validation = await _validator.ValidateAsync(file);
         var pdfFile = dtoFile.File;
         
-        if(!validation.IsValid)
-        {
-            return BadRequest(validation.Errors);
-        }
+        if(!validation.IsValid) return BadRequest(validation.Errors);
 
         await _minioClient.Upload(file, pdfFile);
         
@@ -98,17 +94,11 @@ public class DocumentController : ControllerBase
     public async Task<IActionResult> Download([FromQuery] int id)
     {
         var document = await _documentManager.GetAsyncById(id);
-        if(document == null)
-        {
-            return NotFound();
-        }
-        
+        if(document == null) return NotFound();
+
         var stream = await _minioClient.Download(document);
-        if(stream == null)
-        {
-            return NotFound();
-        }
-        
+        if(stream == null) return NotFound();
+
         return File(stream, "application/pdf", document.Title);
     }
 }
