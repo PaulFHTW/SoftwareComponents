@@ -20,11 +20,15 @@
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageReference Include="NEST" Version="7.17.5" />
+    <PackageReference Include="log4net" Version="3.0.3-preview.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RestAPI\RestAPI.csproj" />
+    <ProjectReference Include="../Logging/Logging.csproj" />
+    <ProjectReference Include="../BLL/BLL.csproj" />
   </ItemGroup>
 
 </Project>
+
 

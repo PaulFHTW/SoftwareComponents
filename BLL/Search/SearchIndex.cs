@@ -24,6 +24,12 @@ public class SearchIndex : ISearchIndex
         Configure().Wait();
     }
 
+    public SearchIndex(string Url)
+    {
+        _uri = new Uri(Url);
+        _logger = new Logger();
+    }
+
     private async Task Configure()
     {
         var elasticSettings = new ElasticsearchClientSettings(_uri).DefaultMappingFor<Document>(d => d.IndexName("documents"));
