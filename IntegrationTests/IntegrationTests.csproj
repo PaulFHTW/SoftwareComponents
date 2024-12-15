@@ -21,12 +21,17 @@
     <PackageReference Include="RichardSzalay.MockHttp" Version="7.0.0" />
     <PackageReference Include="NEST" Version="7.17.5" />
     <PackageReference Include="log4net" Version="3.0.3-preview.1" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Net.Http.Json" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RestAPI\RestAPI.csproj" />
     <ProjectReference Include="../Logging/Logging.csproj" />
     <ProjectReference Include="../BLL/BLL.csproj" />
+    <ProjectReference Include="../RabbitMQ/RabbitMQ.csproj" />
+    <ProjectReference Include="../NMinio/NMinio.csproj" />
+    <ProjectReference Include="../OcrWorker/OcrWorker.csproj" />
   </ItemGroup>
 
 </Project>
