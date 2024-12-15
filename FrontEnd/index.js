@@ -119,7 +119,16 @@ form.onsubmit = async (event) => {
             method: 'POST',
             body: formData
         });
+        
         const id = await response.text();
+        
+        if(response.status !== 200) {
+            const error = JSON.parse(id)[0];
+            alert("Failed to upload document: " + error.errorMessage);
+            form.reset();
+            return;
+        }
+        
         pending.push(parseInt(id));
         ws.open();
     }

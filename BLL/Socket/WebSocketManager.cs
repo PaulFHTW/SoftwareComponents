@@ -11,20 +11,26 @@ public class WebSocketManager(DocumentEventHandler documentEventHandler, ILogger
 {
     public async Task HandleSocket(WebSocket webSocket)
     {
-        var cancellationToken = new CancellationTokenSource();
-        var updateHandler = new EventHandler(async void (_, args) => await OnDocumentUpdated(args, webSocket));
-        documentEventHandler.DocumentUpdated += updateHandler;
+        try
+        {
+            var cancellationToken = new CancellationTokenSource();
+            var updateHandler = new EventHandler(async void (_, args) => await OnDocumentUpdated(args, webSocket));
+            documentEventHandler.DocumentUpdated += updateHandler;
             
-        while(webSocket.State == WebSocketState.Open) await UpdateStatus(webSocket, cancellationToken.Token);
+            while(webSocket.State == WebSocketState.Open) await UpdateStatus(webSocket, cancellationToken.Token);
 
-        documentEventHandler.DocumentUpdated -= updateHandler;
-        await webSocket.CloseAsync(
-            webSocket.CloseStatus ?? WebSocketCloseStatus.NormalClosure,
-            webSocket.CloseStatusDescription,
-            CancellationToken.None
-        );
-        await cancellationToken.CancelAsync();
-        logger.Info("WebSocket connection closed.");
+            documentEventHandler.DocumentUpdated -= updateHandler;
+            await webSocket.CloseAsync(
+                webSocket.CloseStatus ?? WebSocketCloseStatus.NormalClosure,
+                webSocket.CloseStatusDescription,
+                CancellationToken.None
+            );
+            await cancellationToken.CancelAsync();
+            logger.Info("WebSocket connection closed.");
+        } catch (Exception e)
+        {
+            logger.Error(e.Message);
+        }
     }
 
     private async Task OnDocumentUpdated(EventArgs args, WebSocket webSocket)

@@ -43,4 +43,7 @@ COPY --from=publish /app/publish .
 # Explicitly copy the log4net.config file if it's in the Utility folder
 COPY ./Logging/log4net.config ./log4net.config
 
+# Copy the generated NPaperless.xml file from the build folder to /app/
+COPY --from=build /src/RestAPI/docs/NPaperless.xml /app/
+
 ENTRYPOINT ["dotnet", "RestAPI.dll"]
