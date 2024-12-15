@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace DAL.Tests.Repositories;
 
 [TestFixture]
-public class DocumentRepositoryTests2
+public class DocumentRepositoryTests
 {
     private DocumentContext _context;
     private DocumentRepository _repository;
