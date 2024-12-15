@@ -66,6 +66,8 @@ public class DocumentController : ControllerBase
     public async Task<IActionResult> Delete([FromQuery] int id)
     {
         var document = await _documentManager.GetAsyncById(id);
+        if (document == null) return NotFound();
+        
         await _minioClient.Delete(document);
         await _searchIndex.RemoveDocumentAsync(document);
         return await _documentManager.DeleteAsync(id);
@@ -75,6 +77,8 @@ public class DocumentController : ControllerBase
     public async Task<IActionResult> Update([FromQuery] int id, [FromBody] DocumentUpdateDTO updateDto)
     {
         var document = await _documentManager.GetAsyncById(id);
+        if (document == null) return NotFound();
+        
         document.Title = updateDto.Title!;
         
         await _searchIndex.UpdateDocumentAsync(document);

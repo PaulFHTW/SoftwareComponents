@@ -59,6 +59,7 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<DocumentContext>();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger>();
     
+    // Instantiate event handler singletons
     var eventHandler = scope.ServiceProvider.GetRequiredService<DocumentEventHandler>();
     var rabbitHandler = scope.ServiceProvider.GetRequiredService<RabbitStatusUpdateHandler>();
     

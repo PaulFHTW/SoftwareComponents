@@ -10,8 +10,14 @@ public class Logger : ILogger
     
     public Logger()
     {
-        var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
-        XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
+        try
+        {
+            var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly()!);
+            XmlConfigurator.Configure(logRepo, new FileInfo("log4net.config"));
+        } catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
     
     public void Debug(object? message)

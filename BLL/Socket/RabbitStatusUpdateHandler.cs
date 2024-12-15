@@ -34,6 +34,8 @@ public class RabbitStatusUpdateHandler
             if (message.Success)
             {
                 var document = await _documentManager.GetAsyncById(message.DocumentId);
+                if (document == null) return "";
+                
                 document.Content = "Scanned";
                 await _documentManager.PutAsync(document.Id, document);
             }
@@ -41,6 +43,7 @@ public class RabbitStatusUpdateHandler
             return "";
         } catch (Exception e)
         {
+            _logger.Error("Error processing document status update: " + e.Message);
             return "";
         }
     }
