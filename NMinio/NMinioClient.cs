@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DAL.Entities;
 using Minio;
 using Minio.DataModel.Args;
@@ -22,6 +23,7 @@ public class NMinioClient : INMinioClient
         InitializeBuckets();
     }
 
+    [ExcludeFromCodeCoverage]
     private async void InitializeBuckets()
     {
         try

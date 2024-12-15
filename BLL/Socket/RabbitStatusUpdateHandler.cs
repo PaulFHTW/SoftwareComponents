@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using BLL.Documents;
 using MessageQueue.Messages;
@@ -13,6 +14,7 @@ public class RabbitStatusUpdateHandler
     private readonly DocumentEventHandler _documentEventHandler;
     private readonly ILogger _logger;
     
+    [ExcludeFromCodeCoverage]
     public RabbitStatusUpdateHandler(IRabbitClient rabbitClient, IDocumentManager documentManager, DocumentEventHandler documentEventHandler, ILogger logger)
     {
         _rabbitClient = rabbitClient;
@@ -22,7 +24,8 @@ public class RabbitStatusUpdateHandler
         
         rabbitClient.RegisterConsumer(RabbitQueueType.OcrResponseQueue, Consumer);
     }
-
+    
+    [ExcludeFromCodeCoverage]
     private async Task<string> Consumer(string text)
     {
         try

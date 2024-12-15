@@ -24,6 +24,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RestAPI\RestAPI.csproj" />
+    <ProjectReference Include="../NMinio/NMinio.csproj" />
+    <ProjectReference Include="../DAL/DAL.csproj" />
+    <ProjectReference Include="../OcrWorker/OcrWorker.csproj" />
   </ItemGroup>
 
 </Project>

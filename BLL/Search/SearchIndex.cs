@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DAL.Entities;
 using Elastic.Clients.Elasticsearch;
 using Logging;
@@ -11,12 +12,15 @@ public class SearchIndex : ISearchIndex
     private readonly ILogger _logger;
     private ElasticsearchClient _elasticClient;
 
+    [ExcludeFromCodeCoverage]
     public SearchIndex()
     {
         _uri = new Uri("http://elastic_search:9200/");
         _logger = new Logger();
         Configure().Wait();
     }
+    
+    [ExcludeFromCodeCoverage]
     public SearchIndex(IConfiguration configuration, ILogger logger)
     {
         _uri = new Uri(configuration.GetConnectionString("ElasticSearch") ?? "http://elastic_search:9200/");
@@ -24,12 +28,15 @@ public class SearchIndex : ISearchIndex
         Configure().Wait();
     }
 
-    public SearchIndex(string Url)
+    [ExcludeFromCodeCoverage]
+    public SearchIndex(string Url, ILogger logger)
     {
         _uri = new Uri(Url);
-        _logger = new Logger();
+        _logger = logger;
+        Configure().Wait();
     }
 
+    [ExcludeFromCodeCoverage]
     private async Task Configure()
     {
         var elasticSettings = new ElasticsearchClientSettings(_uri).DefaultMappingFor<Document>(d => d.IndexName("documents"));

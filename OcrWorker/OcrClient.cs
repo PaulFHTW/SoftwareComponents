@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using ImageMagick;
 using Tesseract;
@@ -9,7 +10,6 @@ public class OcrClient : IOcrClient
 {
     private readonly string _tessDataPath;
     private readonly string _language;
-    
     private readonly ILogger _logger;
     private readonly TesseractEngine _tesseractEngine;
  

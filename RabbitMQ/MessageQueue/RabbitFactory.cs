@@ -1,9 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
 using Logging;
 using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 
 namespace RabbitMQ;
 
+[ExcludeFromCodeCoverage]
 public class RabbitFactory(IConfiguration configuration, ILogger logger)
 {
     public RabbitClient Create(string name)

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Minio;
 using ILogger = Logging.ILogger;
 
@@ -11,7 +12,8 @@ public class MinioFactory
     private readonly string _bucketName;
     
     private readonly ILogger _logger;
-    
+
+    [ExcludeFromCodeCoverage]
     public MinioFactory(IConfiguration configuration, ILogger logger)
     {
         _endpoint = configuration.GetSection("Minio:Endpoint").Value ?? "minio:9000";
@@ -22,6 +24,7 @@ public class MinioFactory
         _logger = logger;
     }
     
+    [ExcludeFromCodeCoverage]
     public INMinioClient Create()
     {
         return new NMinioClient(new MinioClient()

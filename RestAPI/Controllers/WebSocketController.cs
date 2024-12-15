@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using BLL.Socket;
 using Microsoft.AspNetCore.Mvc;
 using ILogger = Logging.ILogger;
@@ -6,6 +7,8 @@ namespace RestAPI.Controllers;
 
 [ApiController]
 [Route("status")]
+
+[ExcludeFromCodeCoverage]
 public class WebSocketController(IWebSocketManager webSocketManager, ILogger logger) : ControllerBase
 {
     [Route("")]
