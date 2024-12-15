@@ -4,10 +4,9 @@ Software Components LV
 Group: Thomas Spatz. Paul Bogza
 
 ## Setup
-Step 1: `sudo docker compose pull`
-Step 2: `sudo docker compose up -d`
+Step 1: `sudo docker compose up --build`
 
-To stop the containers: `sudo docker compose down --remove-orphans`
+To stop the containers: `sudo docker compose down`
 
 ## Usage
 The webserver is availabe at `http://localhost:80`
