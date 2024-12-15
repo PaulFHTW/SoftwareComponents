@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using AutoMapper;
 using BLL.Documents;
@@ -41,6 +42,7 @@ public class DocumentController : ControllerBase
     /// </summary>
     /// <param name="dtoFile"></param>
     /// <returns>Result of the operation</returns>
+    [ExcludeFromCodeCoverage]
     [HttpPost]
     public async Task<IActionResult> Upload([FromForm] DocumentDTO dtoFile)
     {
@@ -87,6 +89,7 @@ public class DocumentController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <returns>Result of the operation</returns>
+    [ExcludeFromCodeCoverage]
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] int id)
     {
@@ -121,6 +124,7 @@ public class DocumentController : ControllerBase
     /// </summary>
     /// <param name="q"></param>
     /// <returns></returns>
+    [ExcludeFromCodeCoverage]
     [HttpGet("search")]
     public async Task<IEnumerable<Document>> Search([FromQuery] string q)
     {

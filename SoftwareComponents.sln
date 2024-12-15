@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestAPI", "RestAPI\RestAPI.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrWorker", "OcrWorker\OcrWorker.csproj", "{A9EC59C7-B284-4BD7-88D4-AB3057368310}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DALTests", "UnitTests\DALTests\DALTests.csproj", "{C6FE22FA-5001-4C5B-92F1-F3BAAE15184A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestAPITests", "UnitTests\RestAPITests\RestAPITests.csproj", "{1AC21764-6648-4656-AADD-6F7BBC569EED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{C6FE22FA-5001-4C5B-92F1-F3BAAE15184A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ", "RabbitMQ\RabbitMQ.csproj", "{EFDC5E70-C294-437A-A616-E98F8FBEBF59}"
 EndProject
@@ -20,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{0815820C-7171-41E8-AE9C-872603E7AC0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{C4B661E9-EC53-4A77-90B5-17990BD74865}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "IntegrationTests\IntegrationTests.csproj", "{1B5EFDE6-3EE2-4999-A49C-A1195274ECA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +63,10 @@ Global
 		{C4B661E9-EC53-4A77-90B5-17990BD74865}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4B661E9-EC53-4A77-90B5-17990BD74865}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4B661E9-EC53-4A77-90B5-17990BD74865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B5EFDE6-3EE2-4999-A49C-A1195274ECA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B5EFDE6-3EE2-4999-A49C-A1195274ECA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B5EFDE6-3EE2-4999-A49C-A1195274ECA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B5EFDE6-3EE2-4999-A49C-A1195274ECA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

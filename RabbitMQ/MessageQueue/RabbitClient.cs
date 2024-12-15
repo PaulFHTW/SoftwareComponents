@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Logging;
 using RabbitMQ.Client;
@@ -5,6 +6,7 @@ using RabbitMQ.Client.Events;
 
 namespace RabbitMQ;
 
+[ExcludeFromCodeCoverage]
 public class RabbitClient : IRabbitClient
 {
     private readonly IConnection _connection;
@@ -14,7 +16,7 @@ public class RabbitClient : IRabbitClient
 
     private readonly SemaphoreSlim _semaphoreSlim;
     private string _consumerTag;
-    
+
     public RabbitClient(IConnection connection, IModel channel, string routingKey, ILogger logger)
     {
         _connection = connection;
@@ -27,7 +29,7 @@ public class RabbitClient : IRabbitClient
         
         _logger.Info("RabbitMQ client created!");
     }
-
+    
     public void Dispose()
     {
         _semaphoreSlim.Dispose();

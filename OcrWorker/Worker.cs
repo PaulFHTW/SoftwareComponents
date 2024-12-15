@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using BLL.Search;
 using DAL.Entities;
@@ -8,6 +9,7 @@ using ILogger = Logging.ILogger;
 
 namespace NPaperless.OCRLibrary;
 
+[ExcludeFromCodeCoverage]
 public class Worker : IWorker
 {
     private readonly IRabbitClient _rabbitClient;
@@ -16,6 +18,7 @@ public class Worker : IWorker
     private readonly ISearchIndex _searchIndex;
     private readonly ILogger _logger;
     
+    [ExcludeFromCodeCoverage]
     public Worker(IRabbitClient rabbitClient, INMinioClient minioClient, IOcrClient ocrClient, ISearchIndex searchIndex, ILogger logger)
     {
         _rabbitClient = rabbitClient;

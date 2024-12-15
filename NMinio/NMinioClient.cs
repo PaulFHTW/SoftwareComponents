@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DAL.Entities;
 using Minio;
 using Minio.DataModel.Args;
@@ -6,6 +7,7 @@ using ILogger = Logging.ILogger;
 
 namespace NMinio;
 
+[ExcludeFromCodeCoverage]
 public class NMinioClient : INMinioClient
 {
     private readonly IMinioClient _minioClient;

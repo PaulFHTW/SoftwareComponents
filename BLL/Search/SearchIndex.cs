@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using DAL.Entities;
 using Elastic.Clients.Elasticsearch;
 using Logging;
@@ -5,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using ILogger = Logging.ILogger;
 
 namespace BLL.Search;
+
+[ExcludeFromCodeCoverage]
 public class SearchIndex : ISearchIndex
 {
     private readonly Uri _uri;
@@ -18,9 +21,17 @@ public class SearchIndex : ISearchIndex
         _logger = new Logger();
         Configure().Wait();
     }
+    
     public SearchIndex(IConfiguration configuration, ILogger logger)
     {
         _uri = new Uri(configuration.GetConnectionString("ElasticSearch") ?? "http://elastic_search:9200/");
+        _logger = logger;
+        Configure().Wait();
+    }
+
+    public SearchIndex(string Url, ILogger logger)
+    {
+        _uri = new Uri(Url);
         _logger = logger;
         Configure().Wait();
     }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using ImageMagick;
 using Tesseract;
@@ -5,11 +6,11 @@ using ILogger = Logging.ILogger;
 
 namespace NPaperless.OCRLibrary;
 
+[ExcludeFromCodeCoverage]
 public class OcrClient : IOcrClient
 {
     private readonly string _tessDataPath;
     private readonly string _language;
-    
     private readonly ILogger _logger;
     private readonly TesseractEngine _tesseractEngine;
  
