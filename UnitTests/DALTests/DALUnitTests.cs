@@ -5,10 +5,10 @@ using Logging;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
-namespace DALTests;
+namespace DAL.Tests.Repositories;
 
 [TestFixture]
-public class DocumentRepositoryTests2
+public class DocumentRepositoryTests
 {
     private DocumentContext _context;
     private DocumentRepository _repository;
@@ -21,8 +21,8 @@ public class DocumentRepositoryTests2
             .UseInMemoryDatabase("DocumentTestDb")
             .Options;
 
-        _context = new DocumentContext(options);
         _logger = new Logger();
+        _context = new DocumentContext(options);
         _repository = new DocumentRepository(_context, _logger);
     }
 

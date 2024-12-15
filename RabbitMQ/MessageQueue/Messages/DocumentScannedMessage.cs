@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace MessageQueue.Messages;
 
+[ExcludeFromCodeCoverage]
 public class DocumentScannedMessage
 {
     public int DocumentId { get; set; }

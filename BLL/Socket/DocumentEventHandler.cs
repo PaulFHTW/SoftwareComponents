@@ -1,5 +1,6 @@
-namespace BLL.Socket;
+using System.Diagnostics.CodeAnalysis;
 
+namespace BLL.Socket;
 public enum DocumentStatus
 {
     Pending,
@@ -8,12 +9,14 @@ public enum DocumentStatus
     Failed
 }
 
+[ExcludeFromCodeCoverage]
 public class DocumentEventArgs(int documentId, DocumentStatus status) : EventArgs
 {
     public int DocumentId { get; set; } = documentId;
     public DocumentStatus Status { get; set; } = status;
 }
 
+[ExcludeFromCodeCoverage]
 public class DocumentEventHandler
 {
     public event EventHandler? DocumentUpdated;

@@ -4,8 +4,8 @@ namespace BLL.Search;
 
 public interface ISearchIndex
 {
-    Task AddDocumentAsync(Document doc);
+    Task<bool> AddDocumentAsync(Document doc);
     Task<IEnumerable<Document>> SearchDocumentAsync(string searchTerm);
-    Task RemoveDocumentAsync(Document doc);
-    Task UpdateDocumentAsync(Document doc);
+    Task<bool> RemoveDocumentAsync(Document doc);
+    Task<bool> UpdateDocumentAsync(Document doc);
 }

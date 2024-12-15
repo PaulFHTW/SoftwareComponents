@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using BLL.Search;
 using DAL.Entities;
@@ -8,6 +9,7 @@ using ILogger = Logging.ILogger;
 
 namespace NPaperless.OCRLibrary;
 
+[ExcludeFromCodeCoverage]
 public class Worker : IWorker
 {
     private readonly IRabbitClient _rabbitClient;
@@ -16,6 +18,7 @@ public class Worker : IWorker
     private readonly ISearchIndex _searchIndex;
     private readonly ILogger _logger;
     
+    [ExcludeFromCodeCoverage]
     public Worker(IRabbitClient rabbitClient, INMinioClient minioClient, IOcrClient ocrClient, ISearchIndex searchIndex, ILogger logger)
     {
         _rabbitClient = rabbitClient;
@@ -35,9 +38,9 @@ public class Worker : IWorker
             _logger.Info($"Performing OCR for document {documentTitle}");
             await PerformOcr(documentId, documentTitle, documentUploadDate);
         }
-        catch (Exception _)
+        catch (Exception e)
         {
-            // ignored
+            _logger.Error($"Failed to perform OCR: {e.Message}");
         }
 
         return message;
@@ -59,7 +62,13 @@ public class Worker : IWorker
     
         // Add document to kibana
         var document = new Document(id, title, ocrContentText, uploadDate);
-        await _searchIndex.AddDocumentAsync(document);
+
+        if (!await _searchIndex.AddDocumentAsync(document))
+        {
+            _logger.Error("Failed to add document to elastic search!");
+            return;
+        }
+        
         _rabbitClient.SendMessage(RabbitQueueType.OcrResponseQueue, JsonSerializer.Serialize(new DocumentScannedMessage(id, title, true, "Document was scanned successfully!")));
         _logger.Info("Document added to elastic search!");
     }
