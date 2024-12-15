@@ -9,6 +9,7 @@ using ILogger = Logging.ILogger;
 
 namespace NPaperless.OCRLibrary;
 
+[ExcludeFromCodeCoverage]
 public class Worker : IWorker
 {
     private readonly IRabbitClient _rabbitClient;

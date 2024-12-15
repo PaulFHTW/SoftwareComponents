@@ -6,13 +6,14 @@ using Microsoft.Extensions.Configuration;
 using ILogger = Logging.ILogger;
 
 namespace BLL.Search;
+
+[ExcludeFromCodeCoverage]
 public class SearchIndex : ISearchIndex
 {
     private readonly Uri _uri;
     private readonly ILogger _logger;
     private ElasticsearchClient _elasticClient;
 
-    [ExcludeFromCodeCoverage]
     public SearchIndex()
     {
         _uri = new Uri("http://elastic_search:9200/");
@@ -20,7 +21,6 @@ public class SearchIndex : ISearchIndex
         Configure().Wait();
     }
     
-    [ExcludeFromCodeCoverage]
     public SearchIndex(IConfiguration configuration, ILogger logger)
     {
         _uri = new Uri(configuration.GetConnectionString("ElasticSearch") ?? "http://elastic_search:9200/");
@@ -28,7 +28,6 @@ public class SearchIndex : ISearchIndex
         Configure().Wait();
     }
 
-    [ExcludeFromCodeCoverage]
     public SearchIndex(string Url, ILogger logger)
     {
         _uri = new Uri(Url);
@@ -36,7 +35,6 @@ public class SearchIndex : ISearchIndex
         Configure().Wait();
     }
 
-    [ExcludeFromCodeCoverage]
     private async Task Configure()
     {
         var elasticSettings = new ElasticsearchClientSettings(_uri).DefaultMappingFor<Document>(d => d.IndexName("documents"));

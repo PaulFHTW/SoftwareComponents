@@ -131,11 +131,11 @@ namespace BLL.Tests.Documents
             _repositoryMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(existingDocument);
 
             // Act
-            var result = await _documentManager.PutAsync(1, updatedDocument) as NoContentResult;
+            var result = await _documentManager.PutAsync(1, updatedDocument) as OkResult;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(204, result.StatusCode);
+            Assert.AreEqual(200, result.StatusCode);
             Assert.AreEqual("New Title", existingDocument.Title);
             _repositoryMock.Verify(r => r.GetByIdAsync(1), Times.Once);
             _repositoryMock.Verify(r => r.UpdateAsync(existingDocument), Times.Once);
@@ -164,11 +164,11 @@ namespace BLL.Tests.Documents
             _repositoryMock.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(document);
 
             // Act
-            var result = await _documentManager.DeleteAsync(1) as NoContentResult;
+            var result = await _documentManager.DeleteAsync(1) as OkResult;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(204, result.StatusCode);
+            Assert.AreEqual(200, result.StatusCode);
             _repositoryMock.Verify(r => r.GetByIdAsync(1), Times.Once);
             _repositoryMock.Verify(r => r.DeleteAsync(1), Times.Once);
         }

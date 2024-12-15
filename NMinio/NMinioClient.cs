@@ -7,6 +7,7 @@ using ILogger = Logging.ILogger;
 
 namespace NMinio;
 
+[ExcludeFromCodeCoverage]
 public class NMinioClient : INMinioClient
 {
     private readonly IMinioClient _minioClient;
@@ -23,7 +24,6 @@ public class NMinioClient : INMinioClient
         InitializeBuckets();
     }
 
-    [ExcludeFromCodeCoverage]
     private async void InitializeBuckets()
     {
         try

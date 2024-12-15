@@ -34,7 +34,7 @@ public class DocumentManager(IDocumentRepository repository, ILogger logger) : C
         existingItem.Title = item.Title;
         existingItem.UploadDate = item.UploadDate;
         await repository.UpdateAsync(existingItem);
-        return NoContent();
+        return Ok();
     }
 
     public async Task<IActionResult> DeleteAsync(int id)
@@ -43,6 +43,6 @@ public class DocumentManager(IDocumentRepository repository, ILogger logger) : C
         if (item == null) return NotFound();
 
         await repository.DeleteAsync(id);
-        return NoContent();
+        return Ok();
     }
 }

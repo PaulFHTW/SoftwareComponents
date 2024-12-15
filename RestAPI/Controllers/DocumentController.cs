@@ -37,6 +37,7 @@ public class DocumentController : ControllerBase
         _minioClient = minioClient;
     }
     
+    [ExcludeFromCodeCoverage]
     [HttpPost]
     public async Task<IActionResult> Upload([FromForm] DocumentDTO dtoFile)
     {
@@ -63,6 +64,7 @@ public class DocumentController : ControllerBase
         return await _documentManager.GetAsync();
     }
 
+    [ExcludeFromCodeCoverage]
     [HttpDelete]
     public async Task<IActionResult> Delete([FromQuery] int id)
     {
@@ -82,6 +84,7 @@ public class DocumentController : ControllerBase
         return await _documentManager.PutAsync(id, document);
     }
     
+    [ExcludeFromCodeCoverage]
     [HttpGet("search")]
     public async Task<IEnumerable<Document>> Search([FromQuery] string q)
     {

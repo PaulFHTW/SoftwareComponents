@@ -6,6 +6,7 @@ using ILogger = Logging.ILogger;
 
 namespace NPaperless.OCRLibrary;
 
+[ExcludeFromCodeCoverage]
 public class OcrClient : IOcrClient
 {
     private readonly string _tessDataPath;

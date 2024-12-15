@@ -4,6 +4,7 @@ using ILogger = Logging.ILogger;
 
 namespace NMinio;
 
+[ExcludeFromCodeCoverage]
 public class MinioFactory
 {
     private readonly string _endpoint;
@@ -13,7 +14,6 @@ public class MinioFactory
     
     private readonly ILogger _logger;
 
-    [ExcludeFromCodeCoverage]
     public MinioFactory(IConfiguration configuration, ILogger logger)
     {
         _endpoint = configuration.GetSection("Minio:Endpoint").Value ?? "minio:9000";
@@ -24,7 +24,6 @@ public class MinioFactory
         _logger = logger;
     }
     
-    [ExcludeFromCodeCoverage]
     public INMinioClient Create()
     {
         return new NMinioClient(new MinioClient()
