@@ -27,24 +27,19 @@ jobs:
     - name: Build the projects
       run: dotnet build --configuration Release
 
-    - name: Run Unit Tests - DALTests
-      run: dotnet test ./UnitTests/DALTests/DALTests.csproj --configuration Release --no-build --verbosity normal
-
-    - name: Run Unit Tests - RestAPITests
-      run: dotnet test ./UnitTests/RestAPITests/RestAPITests.csproj --configuration Release --no-build --verbosity normal
+    - name: Run Unit Tests
+      run: dotnet test ./UnitTests/UnitTests.csproj --configuration Release --no-build --verbosity normal
 
     - name: Publish Test Results
       if: always()
       run: |
         # Run tests and save results in the appropriate location
-        dotnet test ./UnitTests/DALTests/DALTests.csproj --configuration Release --no-build --logger "trx;LogFileName=test-RESULTS-DALTests.trx"
-        dotnet test ./UnitTests/RestAPITests/RestAPITests.csproj --configuration Release --no-build --logger "trx;LogFileName=test-RESULTS-RestAPITests.trx"
+        dotnet test ./UnitTests/UnitTests.csproj --configuration Release --no-build --logger "trx;LogFileName=test-RESULTS-UnitTests.trx"
     
         # Move .trx files to the appropriate directory
         mkdir -p $GITHUB_WORKSPACE/test-results
     
-        mv ./UnitTests/DALTests/TestResults/test-RESULTS-DALTests.trx $GITHUB_WORKSPACE/test-results/
-        mv ./UnitTests/RestAPITests/TestResults/test-RESULTS-RestAPITests.trx $GITHUB_WORKSPACE/test-results/
+        mv ./UnitTests/TestResults/test-RESULTS-UnitTests.trx $GITHUB_WORKSPACE/test-results/
     
     - name: Upload Test Results
       uses: actions/upload-artifact@v3

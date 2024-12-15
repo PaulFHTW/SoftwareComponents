@@ -1,6 +1,7 @@
 using DAL.Data;
 using DAL.Entities;
 using DAL.Repositories;
+using Logging;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -11,6 +12,7 @@ public class DocumentRepositoryTests
 {
     private DocumentContext _context;
     private DocumentRepository _repository;
+    private ILogger _logger;
 
     [SetUp]
     public void SetUp()
@@ -19,8 +21,9 @@ public class DocumentRepositoryTests
             .UseInMemoryDatabase("DocumentTestDb")
             .Options;
 
+        _logger = new Logger();
         _context = new DocumentContext(options);
-        _repository = new DocumentRepository(_context);
+        _repository = new DocumentRepository(_context, _logger);
     }
 
     [TearDown]
