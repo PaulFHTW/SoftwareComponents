@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>docs\NPaperless.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

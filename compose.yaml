@@ -17,7 +17,10 @@ services:
       - "80:80"
     volumes:
       - ./FrontEnd:/usr/share/nginx/html
+      - ./FrontEnd/nginx.conf:/etc/nginx/conf.d/default.conf
     command: ["nginx", '-g', 'daemon off;']
+    depends_on:
+      - rest
 
   postgres:
     image: postgres:16
