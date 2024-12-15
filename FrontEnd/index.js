@@ -28,7 +28,7 @@ class PaperlessWebSocket {
 
     keepalive = () => {
         this.socket.send('ping');
-        setTimeout(this.keepalive, 30000);
+        this.keepaliveId = setTimeout(this.keepalive, 30000);
     }
     
     isopen = () => {
@@ -75,6 +75,8 @@ class PaperlessWebSocket {
         if (this.socket) {
             this.socket.close();
         }
+        
+        clearTimeout(this.keepaliveId);
     }
 }
 
