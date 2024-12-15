@@ -21,6 +21,8 @@ public class DocumentManager(IDocumentRepository repository, ILogger logger) : C
 
     public async Task<IActionResult> PostAsync(Document item)
     {
+        if (string.IsNullOrWhiteSpace(item.Title)) return BadRequest(new { message = "Document title cannot be empty." });
+        
         logger.Debug("Adding new document...");
         var id = await repository.AddAsync(item);
         return Ok(id);
