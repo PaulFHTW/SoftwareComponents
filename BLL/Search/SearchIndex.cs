@@ -9,7 +9,8 @@ public class SearchIndex : ISearchIndex
 {
     private readonly Uri _uri;
     private readonly ILogger _logger;
-    private ElasticsearchClient _elasticClient;
+    private ElasticsearchClient _elasticClient = null!;
+    private static readonly string[] Fields = ["content", "title"];
 
     public SearchIndex()
     {
@@ -52,7 +53,7 @@ public class SearchIndex : ISearchIndex
             .Index("documents")
             .Query(q => 
                 q.QueryString(qs => 
-                    qs.Fields(new [] { "content", "title" })
+                    qs.Fields(Fields)
                         .Query($"*{searchTerm}*")
         )));
 

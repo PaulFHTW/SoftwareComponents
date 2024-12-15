@@ -21,7 +21,7 @@ public class DocumentRepository(DocumentContext context, ILogger logger) : IDocu
 
     public async Task<int> AddAsync(Document item)
     {
-        if (CheckIfDocumentsSetIsInitialized()) return -1;
+        if (!CheckIfDocumentsSetIsInitialized()) return -1;
         
         var entry = await context.Documents!.AddAsync(item);
         await context.SaveChangesAsync();
