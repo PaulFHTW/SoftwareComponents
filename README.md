@@ -1,5 +1,5 @@
 # SoftwareComponents
-Software Components LV
+Software Components LV, Winter semester 2024
 
 Group: Thomas Spatz. Paul Bogza
 
